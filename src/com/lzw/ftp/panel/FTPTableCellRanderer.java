@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.lzw.ftp.panel;
 
 import java.io.*;
@@ -12,40 +8,20 @@ import javax.swing.table.*;
 
 import com.lzw.ftp.extClass.*;
 
-/**
- * @author Li Zhong Wei ��Ⱦ������Դ��FTP��Դ����������Ⱦ��
- */
-
 public class FTPTableCellRanderer extends DefaultTableCellRenderer {
 	
-	private final ImageIcon folderIcon = new ImageIcon(getClass().getResource(
-			"/com/lzw/ftp/res/folderIcon.JPG")); // �ļ���ͼ��
-	private final ImageIcon fileIcon = new ImageIcon(getClass().getResource(
-			"/com/lzw/ftp/res/fileIcon.JPG")); // �ļ�ͼ��
-	private static FTPTableCellRanderer instance = null; // ��Ⱦ����ʵ�����
+	private static FTPTableCellRanderer instance = null;
 
-	/**
-	 * ����յĹ��췽��
-	 */
 	private FTPTableCellRanderer() {
 	}
 
-	/**
-	 * ��ȡ��Ⱦ��ʵ�����ķ���
-	 * 
-	 * @return ��Ⱦ����ʵ�����
-	 */
 	public static FTPTableCellRanderer getCellRanderer() {
 		if (instance == null)
 			instance = new FTPTableCellRanderer();
 		return instance;
 	}
 
-	/**
-	 * ��д���ñ����ݵķ���
-	 * 
-	 * @see javax.swing.table.DefaultTableCellRenderer#setValue(java.lang.Object)
-	 */
+
 	@Override
 	protected void setValue(Object value) {
 		if (value instanceof FileInterface) {
@@ -54,7 +30,6 @@ public class FTPTableCellRanderer extends DefaultTableCellRenderer {
 			FileSystemView view = FileSystemView.getFileSystemView();
 			if (file.isDirectory()) {
 				setText(file.toString());
-				setIcon(folderIcon);
 			} else {
 				if (file instanceof File) { // ������ΪFile��
 					Icon icon = view.getSystemIcon((File) file);// ��ȡ�ļ���ͼ��
@@ -71,14 +46,12 @@ public class FTPTableCellRanderer extends DefaultTableCellRenderer {
 						setIcon(icon); // ���ñ��Ԫͼ��
 					} catch (IOException e) {
 						e.printStackTrace();
-						setIcon(fileIcon);
 					}
 				}
-				setText(file.toString()); // �����ı�����
+				setText(file.toString());
 			}
-		} else { // ���ѡ��Ĳ����ļ����ļ���
-			setIcon(folderIcon); // ���ñ��õ��ļ���ͼ��
-			setText(value.toString()); // �������
+		} else { 
+			setText(value.toString());
 		}
 	}
 }
