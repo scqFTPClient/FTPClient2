@@ -1,9 +1,3 @@
-/*
- * FtpPanel.java
- *
- * Created on 2008Äê6ÔÂ20ÈÕ, ÏÂÎç3:02
- */
-
 package com.lzw.ftp.panel.ftp;
 
 import java.awt.Color;
@@ -62,11 +56,11 @@ public class FtpPanel extends javax.swing.JPanel {
 	private void initComponents() {
 		ActionMap actionMap = getActionMap();
 		actionMap.put("createFolderAction", new CreateFolderAction(this,
-				"´´½¨ÎÄ¼ş¼Ğ", null));
-		actionMap.put("delAction", new DelFileAction(this, "É¾³ı", null));
-		actionMap.put("refreshAction", new RefreshAction(this, "Ë¢ĞÂ", null));
-		actionMap.put("renameAction", new RenameAction(this, "ÖØÃüÃû", null));
-		actionMap.put("downAction", new DownAction(this, "ÏÂÔØ", null));
+				"æ–°å»ºæ–‡ä»¶å¤¹", null));
+		actionMap.put("delAction", new DelFileAction(this, "åˆ é™¤", null));
+		actionMap.put("refreshAction", new RefreshAction(this, "åˆ·æ–°", null));
+		actionMap.put("renameAction", new RenameAction(this, "é‡å‘½å", null));
+		actionMap.put("downAction", new DownAction(this, "ä¸‹è½½", null));
 
 		java.awt.GridBagConstraints gridBagConstraints;
 
@@ -81,7 +75,7 @@ public class FtpPanel extends javax.swing.JPanel {
 		ftpDiskTable.setDragEnabled(true);
 		ftpSelFilePathLabel = new javax.swing.JLabel();
 
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ô¶³Ì",
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "è¿œç¨‹",
 				javax.swing.border.TitledBorder.CENTER,
 				javax.swing.border.TitledBorder.ABOVE_TOP));
 		setLayout(new java.awt.GridBagLayout());
@@ -89,29 +83,29 @@ public class FtpPanel extends javax.swing.JPanel {
 		toolBar.setRollover(true);
 		toolBar.setFloatable(false);
 
-		delButton.setText("É¾³ı");
+		delButton.setText("åˆ é™¤");
 		delButton.setFocusable(false);
 		delButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		delButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 		delButton.setAction(actionMap.get("delAction"));
 		toolBar.add(delButton);
 
-		renameButton.setText("ÖØÃüÃû");
+		renameButton.setText("é‡å‘½å");
 		renameButton.setFocusable(false);
 		renameButton.setAction(actionMap.get("renameAction"));
 		toolBar.add(renameButton);
 
-		createFolderButton.setText("ĞÂÎÄ¼ş¼Ğ");
+		createFolderButton.setText("æ–°å»ºæ–‡ä»¶å¤¹");
 		createFolderButton.setFocusable(false);
 		createFolderButton.setAction(actionMap.get("createFolderAction"));
 		toolBar.add(createFolderButton);
 
-		downButton.setText("ÏÂÔØ");
+		downButton.setText("ä¸‹è½½");
 		downButton.setFocusable(false);
 		downButton.setAction(actionMap.get("downAction"));
 		toolBar.add(downButton);
 
-		refreshButton.setText("Ë¢ĞÂ");
+		refreshButton.setText("åˆ·æ–°");
 		refreshButton.setFocusable(false);
 		refreshButton.setAction(actionMap.get("refreshAction"));
 		toolBar.add(refreshButton);
@@ -161,9 +155,6 @@ public class FtpPanel extends javax.swing.JPanel {
 		add(ftpSelFilePathLabel, gridBagConstraints);
 	}
 
-	/**
-	 * ±í¸ñµ¥»÷»òË«»÷ÊÂ¼şµÄ´¦Àí·½·¨¡£
-	 */
 	private void ftpDiskTableMouseClicked(java.awt.event.MouseEvent evt) {
 		int selectedRow = ftpDiskTable.getSelectedRow();
 		Object value = ftpDiskTable.getValueAt(selectedRow, 0);
@@ -183,67 +174,59 @@ public class FtpPanel extends javax.swing.JPanel {
 		}
 	}
 
-	/**
-	 * ¶ÁÈ¡FTPÎÄ¼şµ½±í¸ñµÄ·½·¨
-	 * 
-	 * @param list
-	 *            ¶ÁÈ¡FTP·şÎñÆ÷×ÊÔ´ÁĞ±íµÄÊäÈëÁ÷
-	 */
 	public synchronized void listFtpFiles(final TelnetInputStream list) {
-		// »ñÈ¡±í¸ñµÄÊı¾İÄ£ĞÍ
+
 		final DefaultTableModel model = (DefaultTableModel) ftpDiskTable
 				.getModel();
 		model.setRowCount(0);
-		// ´´½¨Ò»¸öÏß³ÌÀà
+
 		Runnable runnable = new Runnable() {
 			public synchronized void run() {
 				ftpDiskTable.clearSelection();
 				try {
-					String pwd = getPwd(); // »ñÈ¡FTP·şÎñÆ÷µÄµ±Ç°ÎÄ¼ş¼Ğ
+					String pwd = getPwd();
 					model.addRow(new Object[] { new FtpFile(".", pwd, true),
-							"", "" }); // Ìí¼Ó¡°.¡±·ûºÅ
+							"", "" }); 
 					model.addRow(new Object[] { new FtpFile("..", pwd, true),
-							"", "" }); // Ìí¼Ó¡°..¡±·ûºÅ
+							"", "" });
 					BufferedReader br = new BufferedReader(
-							new InputStreamReader(list)); // ´´½¨×Ö·ûÊäÈëÁ÷
+							new InputStreamReader(list)); // ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					String data = null;
-					// ¶ÁÈ¡ÊäÈëÁ÷ÖĞµÄÎÄ¼şÄ¿Â¼
+			
 					while ((data = br.readLine()) != null) {
-						// ´´½¨FTPÎÄ¼ş¶ÔÏó
+		
 						FtpFile ftpFile = new FtpFile();
-						// »ñÈ¡FTP·şÎñÆ÷Ä¿Â¼ĞÅÏ¢
+
 						String dateStr = data.substring(0, 17).trim();
 						String sizeOrDir = data.substring(18, 39).trim();
 						String fileName = data.substring(39, data.length())
 								.trim();
-						// ½«FTPÄ¿Â¼ĞÅÏ¢³õÊ¼»¯µ½FTPÎÄ¼ş¶ÔÏóÖĞ
+
 						ftpFile.setLastDate(dateStr);
 						ftpFile.setSize(sizeOrDir);
 						ftpFile.setName(fileName);
 						ftpFile.setPath(pwd);
-						// ½«ÎÄ¼şĞÅÏ¢Ìí¼Óµ½±í¸ñÖĞ
+	
 						model.addRow(new Object[] { ftpFile, ftpFile.getSize(),
 								dateStr });
 					}
-					br.close(); // ¹Ø±ÕÊäÈëÁ÷
+					br.close(); 
 				} catch (IOException ex) {
 					Logger.getLogger(FTP_Client_Frame.class.getName()).log(
 							Level.SEVERE, null, ex);
 				}
 			}
 		};
-		if (SwingUtilities.isEventDispatchThread()) // Æô¶¯Ïß³Ì¶ÔÏó
+		if (SwingUtilities.isEventDispatchThread()) 
 			runnable.run();
 		else
 			SwingUtilities.invokeLater(runnable);
 	}
 
-	/**
-	 * ÉèÖÃFTPÁ¬½Ó£¬²¢Æô¶¯ÏÂÔØ¶ÓÁĞÏß³ÌµÄ·½·¨
-	 */
+
 	public void setFtpClient(FtpClient ftpClient) {
 		this.ftpClient = ftpClient;
-		// ÒÔ30ÃëÎª¼ä¸ôÓë·şÎñÆ÷±£³ÖÍ¨Ñ¶
+
 		final Timer timer = new Timer(3000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -261,21 +244,15 @@ public class FtpPanel extends javax.swing.JPanel {
 		startDownThread();
 	}
 
-	/**
-	 * Ë¢ĞÂFTP×ÊÔ´¹ÜÀíÃæ°åµÄµ±Ç°ÎÄ¼ş¼Ğ
-	 */
 	public void refreshCurrentFolder() {
 		try {
-			TelnetInputStream list = ftpClient.list(); // »ñÈ¡·şÎñÆ÷ÎÄ¼şÁĞ±í
-			listFtpFiles(list); // µ÷ÓÃ½âÎö·½·¨
+			TelnetInputStream list = ftpClient.list();
+			listFtpFiles(list);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * ¿ªÊ¼ÏÂÔØ¶ÓÁĞÏß³Ì
-	 */
 	private void startDownThread() {
 		if (thread != null)
 			thread.stopThread();
@@ -283,9 +260,6 @@ public class FtpPanel extends javax.swing.JPanel {
 		thread.start();
 	}
 
-	/**
-	 * Í£Ö¹ÏÂÔØ¶ÓÁĞÏß³Ì
-	 */
 	public void stopDownThread() {
 		if (thread != null) {
 			thread.stopThread();
@@ -307,9 +281,6 @@ public class FtpPanel extends javax.swing.JPanel {
 		return queue;
 	}
 
-	/**
-	 * Çå³ıFTP×ÊÔ´±í¸ñÄÚÈİµÄ·½·¨
-	 */
 	public void clearTable() {
 		FtpTableModel model = (FtpTableModel) ftpDiskTable.getModel();
 		model.setRowCount(0);

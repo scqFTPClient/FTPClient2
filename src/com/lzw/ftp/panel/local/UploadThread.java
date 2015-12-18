@@ -8,43 +8,22 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.Queue;
-
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 
 import com.lzw.ftp.extClass.FtpClient;
 import com.lzw.ftp.extClass.FtpFile;
 import com.lzw.ftp.extClass.ProgressArg;
 import com.lzw.ftp.panel.ftp.FtpPanel;
-import com.lzw.ftp.panel.queue.UploadPanel;
 
-/**
- * @author Li Zhong Wei FTP文件管理模块的本地文件上传队列的线程
- */
+
 class UploadThread extends Thread {
 	private LocalPanel localPanel;
-	String path = "";// 上传文件的本地相对路径
-	String selPath;// 选择的本地文件的路径
-	private boolean conRun = true; // 线程的控制变量
-	private FtpClient ftpClient; // FTP控制类
-	private Object[] queueValues; // 队列任务数组
+	String path = "";
+	String selPath;
+	private boolean conRun = true;
+	private FtpClient ftpClient;
+	private Object[] queueValues;
 
-	/**
-	 * 创建上传队列线程的构造方法
-	 * 
-	 * @param localPanel
-	 *            - 本地资源管理面板
-	 * @param server
-	 *            - FTP服务器地址
-	 * @param port
-	 *            - FTP服务器端口号
-	 * @param userStr
-	 *            - 登录FTP服务器的用户名
-	 * @param passStr
-	 *            - 登录FTP服务器的密码
-	 */
 	public UploadThread(LocalPanel localPanel, String server, int port,
 			String userStr, String passStr) {
 		try {
@@ -56,12 +35,12 @@ class UploadThread extends Thread {
 			e.printStackTrace();
 		}
 		this.localPanel = localPanel;
-		new Thread() { // 创建保持服务器通讯的线程
+		new Thread() { 
 			public void run() {
 				while (conRun) {
 					try {
 						Thread.sleep(30000);
-						// 定时向服务器发送消息，保持连接
+
 						UploadThread.this.ftpClient.noop();
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -71,22 +50,14 @@ class UploadThread extends Thread {
 		}.start();
 	}
 
-	public void stopThread() { // 停止线程的方法
+	public void stopThread() { 
 		conRun = false;
 	}
 
-	private void copyFile(File file, FtpFile ftpFile) { // 递归遍历文件夹的方法
-		// 判断队列面板是否执行暂停命令
-		while (localPanel.frame.getQueuePanel().isStop()) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+	private void copyFile(File file, FtpFile ftpFile) {
+
 
 		Object[] args = localPanel.queue.peek();
-		// 判断队列顶是不是上一个处理的任务。
 		if (queueValues == null || args == null
 				|| !queueValues[0].equals(args[0]))
 			return;
@@ -96,8 +67,7 @@ class UploadThread extends Thread {
 			path = ftpFile.getAbsolutePath();
 			System.out.println(path);
 			if (file.isFile()) {
-				UploadPanel uploadPanel = localPanel.frame.getUploadPanel();
-				String remoteFile = path + "/" + file.getName(); // 远程FTP的文件名绝对路径
+				String remoteFile = path + "/" + file.getName();
 				System.out.println("remoteFile:" + remoteFile);
 				double fileLength = file.length() / Math.pow(1024, 2);
 				ProgressArg progressArg = new ProgressArg(
@@ -105,25 +75,24 @@ class UploadThread extends Thread {
 				String size = String.format("%.4f MB", fileLength);
 				Object[] row = new Object[] { file.getAbsoluteFile(), size,
 						remoteFile, ftpClient.getServer(), progressArg };
-				uploadPanel.addRow(row);
-				OutputStream put = ftpClient.put(remoteFile); // 获取服务器文件的输出流
-				FileInputStream fis = null; // 本地文件的输入流
+				OutputStream put = ftpClient.put(remoteFile); 
+				FileInputStream fis = null;
 				try {
-					fis = new FileInputStream(file); // 初始化文件的输入流
+					fis = new FileInputStream(file); 
 				} catch (Exception e) {
 					e.printStackTrace();
 					return;
 				}
 				int readNum = 0;
-				byte[] data = new byte[1024]; // 缓存大小
-				while ((readNum = fis.read(data)) > 0) { // 读取本地文件到缓存
-					Thread.sleep(0, 30); // 线程休眠
-					put.write(data, 0, readNum); // 输出到服务器
-					progressArg.setValue(progressArg.getValue() + 1);// 累加进度条
+				byte[] data = new byte[1024]; 
+				while ((readNum = fis.read(data)) > 0) { 
+					Thread.sleep(0, 30);
+					put.write(data, 0, readNum); 
+					progressArg.setValue(progressArg.getValue() + 1);
 				}
-				progressArg.setValue(progressArg.getMax()); // 结束进度条
-				fis.close(); // 关闭文件输入流
-				put.close(); // 关闭服务器输出流
+				progressArg.setValue(progressArg.getMax()); 
+				fis.close();
+				put.close(); 
 			} else if (file.isDirectory()) {
 				// path = ftpFile.getAbsolutePath();
 				path = file.getPath().replace(selPath, "");
@@ -145,35 +114,29 @@ class UploadThread extends Thread {
 		}
 	}
 
-	/**
-	 * 线程的主体方法
-	 * 
-	 * @see java.lang.Thread#run()
-	 */
-	public void run() { // 线程的主体方法
+	public void run() {
 		while (conRun) {
 			try {
-				Thread.sleep(1000); // 线程休眠1秒
-				Queue<Object[]> queue = localPanel.queue; // 获取本地面板的队列对象
-				queueValues = queue.peek(); // 获取队列首的对象
-				if (queueValues == null) { // 如果该对象为空
-					continue; // 进行下一次循环
+				Thread.sleep(1000);
+				Queue<Object[]> queue = localPanel.queue; 
+				queueValues = queue.peek(); 
+				if (queueValues == null) { 
+					continue;
 				}
-				File file = (File) queueValues[0]; // 获取队列中的本队文件对象
-				FtpFile ftpFile = (FtpFile) queueValues[1]; // 获取队列中的FTP文件对象
+				File file = (File) queueValues[0]; 
+				FtpFile ftpFile = (FtpFile) queueValues[1]; 
 				if (file != null) {
 					selPath = file.getParent();
-					copyFile(file, ftpFile); // 调用递归方法上传文件
+					copyFile(file, ftpFile);
 					FtpPanel ftpPanel = localPanel.frame.getFtpPanel();
-					ftpPanel.refreshCurrentFolder(); // 刷新FTP面板中的资源
+					ftpPanel.refreshCurrentFolder();
 				}
 				Object[] args = queue.peek();
-				// 判断队列顶是否为处理的上一个任务。
 				if (queueValues == null || args == null
 						|| !queueValues[0].equals(args[0])) {
 					continue;
 				}
-				queue.remove(); // 移除队列首元素
+				queue.remove();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

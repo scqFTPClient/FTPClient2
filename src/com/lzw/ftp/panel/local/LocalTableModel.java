@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.lzw.ftp.panel.local;
 
 class LocalTableModel extends javax.swing.table.DefaultTableModel {
@@ -9,7 +6,7 @@ class LocalTableModel extends javax.swing.table.DefaultTableModel {
 	boolean[] canEdit = new boolean[] { false, false, false };
 
 	LocalTableModel() {
-		super(new Object[][] {}, new String[] { "ÎÄ¼şÃû", "´óĞ¡", "ÈÕÆÚ" });
+		super(new Object[][] {}, new String[] { "æ–‡ä»¶å", "å¤§å°", "æ—¥æœŸ" });
 	}
 
 	public Class getColumnClass(int columnIndex) {

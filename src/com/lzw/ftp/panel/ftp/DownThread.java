@@ -10,45 +10,39 @@ import javax.swing.*;
 import sun.net.*;
 
 import com.lzw.ftp.extClass.*;
-import com.lzw.ftp.panel.queue.*;
 
-/**
- * FTPÎÄ¼þ¹ÜÀíÄ£¿éµÄFTPÎÄ¼þÏÂÔØ¶ÓÁÐµÄÏß³Ì
- * 
- * @author Li Zhong Wei
- */
 public class DownThread extends Thread {
-	private final FtpPanel ftpPanel; // FTP×ÊÔ´¹ÜÀíÃæ°å
-	private final FtpClient ftpClient; // FTP¿ØÖÆÀà
-	private boolean conRun = true; // Ïß³ÌµÄ¿ØÖÆ±äÁ¿
-	private String path; // FTPµÄÂ·¾¶ÐÅÏ¢
-	private Object[] queueValues; // ÏÂÔØÈÎÎñµÄÊý×é
+	private final FtpPanel ftpPanel; // FTPï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private final FtpClient ftpClient; // FTPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private boolean conRun = true; // ï¿½ß³ÌµÄ¿ï¿½ï¿½Æ±ï¿½ï¿½ï¿½
+	private String path; // FTPï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½Ï¢
+	private Object[] queueValues; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	/**
-	 * ¹¹Ôì·½·¨
+	 * ï¿½ï¿½ï¿½ì·½ï¿½ï¿½
 	 * 
 	 * @param ftpPanel
-	 *            - FTP×ÊÔ´¹ÜÀíÃæ°å
+	 *            - FTPï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public DownThread(FtpPanel ftpPanel) {
 		this.ftpPanel = ftpPanel;
-		ftpClient = new FtpClient(); // ´´½¨ÐÂµÄFTP¿ØÖÆ¶ÔÏó
+		ftpClient = new FtpClient(); // ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½FTPï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½
 		FtpClient ftp = ftpPanel.ftpClient;
 		try {
-			// Á¬½Óµ½FTP·þÎñÆ÷
+			// ï¿½ï¿½ï¿½Óµï¿½FTPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			ftpClient.openServer(ftp.getServer(), ftp.getPort());
-			ftpClient.login(ftp.getName(), ftp.getPass()); // µÇÂ¼·þÎñÆ÷
-			ftpClient.binary(); // Ê¹ÓÃ¶þ½øÖÆ´«Êä
+			ftpClient.login(ftp.getName(), ftp.getPass()); // ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			ftpClient.binary(); // Ê¹ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½Æ´ï¿½ï¿½ï¿½
 			ftpClient.noop();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		new Thread() { // ´´½¨±£³Ö·þÎñÆ÷Í¨Ñ¶µÄÏß³Ì
+		new Thread() { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Ñ¶ï¿½ï¿½ï¿½ß³ï¿½
 			public void run() {
 				while (conRun) {
 					try {
 						Thread.sleep(30000);
-						ftpClient.noop(); // ¶¨Ê±Ïò·þÎñÆ÷·¢ËÍÏûÏ¢£¬±£³ÖÁ¬½Ó
+						ftpClient.noop(); // ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -57,29 +51,15 @@ public class DownThread extends Thread {
 		}.start();
 	}
 
-	public void stopThread() {// Í£Ö¹Ïß³ÌµÄ·½·¨
+	public void stopThread() {// Í£Ö¹ï¿½ß³ÌµÄ·ï¿½ï¿½ï¿½
 		conRun = false;
 	}
 
-	/**
-	 * ÏÂÔØÏß³ÌµÄµÝ¹é·½·¨£¬ÓÃ»§Ì½Ë÷FTPÏÂÔØÎÄ¼þ¼ÐµÄËùÓÐ×ÓÎÄ¼þ¼ÐºÍÄÚÈÝ
-	 * 
-	 * @param file
-	 *            - FTPÎÄ¼þ¶ÔÏó
-	 * @param localFolder
-	 *            - ±¾µØÎÄ¼þ¼Ð¶ÔÏó
-	 */
+
 	private void downFile(FtpFile file, File localFolder) {
-		// ÅÐ¶Ï¶ÓÁÐÃæ°åÊÇ·ñÖ´ÐÐÔÝÍ£ÃüÁî
-		while (ftpPanel.frame.getQueuePanel().isStop()) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+
 		Object[] args = ftpPanel.queue.peek();
-		// ÅÐ¶Ï¶ÓÁÐ¶¥ÊÇ·ñÎª´¦ÀíµÄÉÏÒ»¸öÈÎÎñ¡£
+		// ï¿½Ð¶Ï¶ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (queueValues == null || args == null
 				|| !queueValues[0].equals(args[0]))
 			return;
@@ -87,18 +67,18 @@ public class DownThread extends Thread {
 			String ftpFileStr = file.getAbsolutePath().replaceFirst(path + "/",
 					"");
 			if (file.isFile()) {
-				// »ñÈ¡·þÎñÆ÷Ö¸¶¨ÎÄ¼þµÄÊäÈëÁ÷
+				// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				TelnetInputStream ftpIs = ftpClient.get(file.getName());
 				if (ftpIs == null) {
 					JOptionPane.showMessageDialog(this.ftpPanel, file.getName()
-							+ "ÎÞ·¨ÏÂÔØ");
+							+ "ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½");
 					return;
 				}
-				// ´´½¨±¾µØÎÄ¼þ¶ÔÏó
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 				File downFile = new File(localFolder, ftpFileStr);
-				// ´´½¨±¾µØÎÄ¼þµÄÊä³öÁ÷
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				FileOutputStream fout = new FileOutputStream(downFile, true);
-				// ¼ÆËãÎÄ¼þ´óÐ¡
+				// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡
 				double fileLength = file.getLongSize() / Math.pow(1024, 2);
 				ProgressArg progressArg = new ProgressArg((int) (file
 						.getLongSize() / 1024), 0, 0);
@@ -106,25 +86,24 @@ public class DownThread extends Thread {
 				Object[] row = new Object[] { ftpFileStr, size,
 						downFile.getAbsolutePath(), ftpClient.getServer(),
 						progressArg };
-				DownloadPanel downloadPanel = ftpPanel.frame.getDownloadPanel();
-				downloadPanel.addRow(row);
-				byte[] data = new byte[1024]; // ¶¨Òå»º´æ
+
+				byte[] data = new byte[1024]; // ï¿½ï¿½ï¿½å»ºï¿½ï¿½
 				int read = -1;
-				while ((read = ftpIs.read(data)) > 0) { // ¶ÁÈ¡FTPÎÄ¼þÄÚÈÝµ½»º´æ
-					Thread.sleep(0, 30); // Ïß³ÌÐÝÃß
-					fout.write(data, 0, read); // ½«»º´æÊý¾ÝÐ´Èë±¾µØÎÄ¼þ
-					// ÀÛ¼Ó½ø¶ÈÌõ
+				while ((read = ftpIs.read(data)) > 0) { // ï¿½ï¿½È¡FTPï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½ï¿½
+					Thread.sleep(0, 30); // ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½
+					fout.write(data, 0, read); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë±¾ï¿½ï¿½ï¿½Ä¼ï¿½
+					// ï¿½Û¼Ó½ï¿½ï¿½ï¿½ï¿½
 					progressArg.setValue(progressArg.getValue() + 1);
 				}
-				progressArg.setValue(progressArg.getMax());// ½áÊø½ø¶ÈÌõ
-				fout.close(); // ¹Ø±ÕÎÄ¼þÊä³öÁ÷
-				ftpIs.close(); // ¹Ø±ÕFTPÎÄ¼þÊäÈëÁ÷
-			} else if (file.isDirectory()) { // Èç¹ûÏÂÔØµÄÊÇÎÄ¼þ¼Ð
-				// ´´½¨±¾µØÎÄ¼þ¼Ð¶ÔÏó
+				progressArg.setValue(progressArg.getMax());// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				fout.close(); // ï¿½Ø±ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				ftpIs.close(); // ï¿½Ø±ï¿½FTPï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			} else if (file.isDirectory()) { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½
 				File directory = new File(localFolder, ftpFileStr);
-				directory.mkdirs(); // ´´½¨±¾µØµÄÎÄ¼þ¼Ð
-				ftpClient.cd(file.getName()); // ¸Ä±äFTP·þÎñÆ÷µÄµ±Ç°Â·¾¶
-				// »ñÈ¡FTP·þÎñÆ÷µÄÎÄ¼þÁÐ±íÐÅÏ¢
+				directory.mkdirs(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+				ftpClient.cd(file.getName()); // ï¿½Ä±ï¿½FTPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½Ç°Â·ï¿½ï¿½
+				// ï¿½ï¿½È¡FTPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð±ï¿½ï¿½ï¿½Ï¢
 				InputStreamReader list = new InputStreamReader(ftpClient.list());
 				BufferedReader br = new BufferedReader(list);
 				String nameStr = null;
@@ -132,22 +111,22 @@ public class DownThread extends Thread {
 					Thread.sleep(0, 50);
 					String name = nameStr.substring(39);
 					String size = nameStr.substring(18, 39);
-					FtpFile ftpFile = new FtpFile(); // ´´½¨FTPÎÄ¼þ¶ÔÏó
-					ftpFile.setName(name); // ÉèÖÃÎÄ¼þÃû
-					ftpFile.setPath(file.getAbsolutePath());// ÉèÖÃÎÄ¼þÂ·¾¶
-					ftpFile.setSize(size); // ÉèÖÃÎÄ¼þ´óÐ¡
-					downFile(ftpFile, localFolder); // µÝ¹éÖ´ÐÐ×ÓÎÄ¼þ¼ÐµÄÏÂÔØ
+					FtpFile ftpFile = new FtpFile(); // ï¿½ï¿½ï¿½ï¿½FTPï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+					ftpFile.setName(name); // ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+					ftpFile.setPath(file.getAbsolutePath());// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Â·ï¿½ï¿½
+					ftpFile.setSize(size); // ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡
+					downFile(ftpFile, localFolder); // ï¿½Ý¹ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
 				}
 				list.close();
 				br.close();
-				ftpClient.cdUp(); // ·µ»ØFTPÉÏ¼¶Â·¾¶
+				ftpClient.cdUp(); // ï¿½ï¿½ï¿½ï¿½FTPï¿½Ï¼ï¿½Â·ï¿½ï¿½
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	public void run() { // Ïß³ÌÒµÎñ·½·¨
+	public void run() { // ï¿½ß³ï¿½Òµï¿½ñ·½·ï¿½
 		while (conRun) {
 			try {
 				Thread.sleep(1000);
@@ -167,7 +146,7 @@ public class DownThread extends Thread {
 					ftpPanel.frame.getLocalPanel().refreshCurrentFolder();
 				}
 				Object[] args = ftpPanel.queue.peek();
-				// ÅÐ¶Ï¶ÓÁÐ¶¥ÊÇ·ñÎª´¦ÀíµÄÉÏÒ»¸öÈÎÎñ¡£
+				// ï¿½Ð¶Ï¶ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				if (queueValues == null || args == null
 						|| !queueValues[0].equals(args[0]))
 					continue;

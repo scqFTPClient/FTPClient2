@@ -26,24 +26,19 @@ public class FTPTableCellRanderer extends DefaultTableCellRenderer {
 	protected void setValue(Object value) {
 		if (value instanceof FileInterface) {
 			FileInterface file = (FileInterface) value;
-			// ��ȡFileSystemView���ʵ�����
 			FileSystemView view = FileSystemView.getFileSystemView();
 			if (file.isDirectory()) {
 				setText(file.toString());
 			} else {
-				if (file instanceof File) { // ������ΪFile��
+				if (file instanceof File) { 
 					Icon icon = view.getSystemIcon((File) file);// ��ȡ�ļ���ͼ��
 					setIcon(icon); // ���ñ��Ԫͼ��
-				} else if (file instanceof FtpFile) { // ������ΪFtpFile��
+				} else if (file instanceof FtpFile) {
 					FtpFile ftpfile = (FtpFile) file;
 					try {
-						// ʹ��FtpFile���ļ���ƴ�����ʱ�ļ�
 						File tempFile = File.createTempFile("tempfile_",
 								ftpfile.getName());
-						// ��ȡ��ʱ�ļ���ͼ��
-						Icon icon = view.getSystemIcon(tempFile);
-						tempFile.delete(); // ɾ����ʱ�ļ�
-						setIcon(icon); // ���ñ��Ԫͼ��
+						tempFile.delete();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

@@ -32,9 +32,6 @@ import javax.swing.border.BevelBorder;
 import com.lzw.ftp.FTP_Client_Frame;
 import com.lzw.ftp.extClass.SiteInfoBean;
 
-/**
- * @author lzwJava Á¬½Óµ½FTPÕ¾µãµÄ¶Ô»°¿ò
- */
 public class FtpLinkDialog extends JDialog implements ActionListener {
 	private Properties siteInfo = new Properties();
 	private JList list;
@@ -52,14 +49,12 @@ public class FtpLinkDialog extends JDialog implements ActionListener {
 		initComponents();
 	}
 
-	/**
-	 * ³õÊ¼»¯´°Ìå½çÃæµÄ·½·¨
-	 */
+
 	public void initComponents() {
 		loadSiteProperties();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		setTitle("Á¬½Óµ½FTPÕ¾µã¶Ô»°¿ò");
+		setTitle("ï¿½ï¿½ï¿½Óµï¿½FTPÕ¾ï¿½ï¿½Ô»ï¿½ï¿½ï¿½");
 		BorderLayout borderLayout = new BorderLayout();
 		borderLayout.setHgap(5);
 		setLayout(borderLayout);
@@ -67,17 +62,17 @@ public class FtpLinkDialog extends JDialog implements ActionListener {
 		list = new JList();
 		final BevelBorder bevelBorder = new BevelBorder(BevelBorder.LOWERED);
 		list.setBorder(bevelBorder);
-		loadSiteList(); // ×°ÔØÕ¾µãÊý¾Ý
+		loadSiteList();
 		JScrollPane scrollPanel = new JScrollPane(list);
 		add(scrollPanel, CENTER);
 
 		JPanel controlPanel = new JPanel();
 		BoxLayout boxLayout = new BoxLayout(controlPanel, BoxLayout.Y_AXIS);
 		controlPanel.setLayout(boxLayout);
-		JButton linkButton = new JButton("Á¬½Ó");
+		JButton linkButton = new JButton("ï¿½ï¿½ï¿½ï¿½");
 		linkButton.setActionCommand("link");
 		linkButton.addActionListener(this);
-		JButton lookButton = new JButton("²é¿´");
+		JButton lookButton = new JButton("ï¿½é¿´");
 		lookButton.setActionCommand("look");
 		lookButton.addActionListener(this);
 		controlPanel.add(linkButton);
@@ -90,9 +85,6 @@ public class FtpLinkDialog extends JDialog implements ActionListener {
 		setVisible(true);
 	}
 
-	/**
-	 * ×°ÔØÕ¾µãÊý¾ÝµÄ·½·¨
-	 */
 	public void loadSiteList() {
 		Enumeration<Object> keys = siteInfo.keys();
 		DefaultListModel model = new DefaultListModel();
@@ -104,9 +96,6 @@ public class FtpLinkDialog extends JDialog implements ActionListener {
 		list.setModel(model);
 	}
 
-	/**
-	 * ×°ÔÚÕ¾µãÊý¾ÝµÄ·½·¨
-	 */
 	private void loadSiteProperties() {
 		try {
 			if (!FILE.exists()) {

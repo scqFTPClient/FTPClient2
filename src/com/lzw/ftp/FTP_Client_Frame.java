@@ -1,24 +1,12 @@
-/*
- * FTP_Client_Frame.java
- *
- * Created on 2008��6��17��, ����3:36
- */
 package com.lzw.ftp;
 
-import java.awt.AWTException;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -38,14 +26,8 @@ import com.lzw.ftp.extClass.SiteInfoBean;
 import com.lzw.ftp.panel.ftp.FtpPanel;
 import com.lzw.ftp.panel.local.LocalPanel;
 import com.lzw.ftp.panel.manager.FtpSiteDialog;
-import com.lzw.ftp.panel.queue.DownloadPanel;
-import com.lzw.ftp.panel.queue.QueuePanel;
-import com.lzw.ftp.panel.queue.UploadPanel;
 import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 
-/**
- * @author lzwJava
- */
 public class FTP_Client_Frame extends javax.swing.JFrame {
 	FtpClient ftpClient;
 	private JPasswordField PassField;
@@ -55,92 +37,40 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 	private JTextField portTextField;
 	private JTextField serverTextField;
 	private JTextField userTextField;
-	private QueuePanel queuePanel;
-	private UploadPanel uploadPanel;
-	private DownloadPanel downloadPanel;
 	private JSplitPane jSplitPane1;
 	private JButton linkButton;
-	private final LinkToAction LINK_TO_ACTION; // ���ӵ� ��ť�Ķ���������
-	private final CutLinkAction CUT_LINK_ACTION; // �Ͽ� ��ť�Ķ���������
-	private SystemTray systemTray;
+	private final LinkToAction LINK_TO_ACTION; 
+	private final CutLinkAction CUT_LINK_ACTION; 
 	private JToggleButton shutdownButton;
-	private final ImageIcon icon = new ImageIcon(getClass().getResource(
-			"/com/lzw/ftp/res/trayIcon.png"));
+
 
 	public FTP_Client_Frame() {
-		LINK_TO_ACTION = new LinkToAction(this, "���ӵ�", null);
-		CUT_LINK_ACTION = new CutLinkAction(this, "�Ͽ�", null);
+		LINK_TO_ACTION = new LinkToAction(this, "连接到", null);
+		CUT_LINK_ACTION = new CutLinkAction(this, "断开", null);
 		initComponents();
-		initSystemTray();
 	}
 
-	/**
-	 * ��ʼ��ϵͳ���̵ķ���
-	 */
-	private void initSystemTray() {
-		if (SystemTray.isSupported())
-			systemTray = SystemTray.getSystemTray();
-		TrayIcon trayIcon = new TrayIcon(icon.getImage());
-		PopupMenu popupMenu = new PopupMenu("���̲˵�");
-
-		// ������ʾ������˵���
-		MenuItem showMenuItem = new MenuItem("��ʾ������");
-		showMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				FTP_Client_Frame.this.setExtendedState(JFrame.NORMAL);
-				FTP_Client_Frame.this.setVisible(true);
-			}
-		});
-
-		// �����˳��˵���
-		MenuItem exitMenuItem = new MenuItem("�˳�");
-		exitMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-
-		popupMenu.add(showMenuItem);
-		popupMenu.addSeparator();
-		popupMenu.add(exitMenuItem);
-		trayIcon.setPopupMenu(popupMenu);
-		try {
-			systemTray.add(trayIcon);
-		} catch (AWTException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * ��ʼ���������ķ���
-	 */
 	private void initComponents() {
-		setIconImage(icon.getImage());
 		java.awt.GridBagConstraints gridBagConstraints;
 
 		JPanel jPanel1 = new JPanel();
 		JToolBar jToolBar1 = new JToolBar();
 		JButton linkTo = new JButton();
 		cutLinkButton = new JButton();
-		JPanel jPanel4 = new JPanel();
-		JLabel jLabel1 = new JLabel();
+		JPanel loginPanel = new JPanel();
+		JLabel ipLabel = new JLabel();
 		serverTextField = new JTextField();
-		JLabel jLabel2 = new JLabel();
+		JLabel usernameLabel = new JLabel();
 		userTextField = new JTextField();
-		JLabel jLabel3 = new JLabel();
+		JLabel passwordLabel = new JLabel();
 		PassField = new JPasswordField();
-		JLabel jLabel6 = new JLabel();
+		JLabel portLabel = new JLabel();
 		portTextField = new JTextField();
 		linkButton = new JButton();
 		JSplitPane jSplitPane2 = new JSplitPane();
 		jSplitPane1 = new JSplitPane();
-		ftpPanel = new FtpPanel(this); // ��ʼ��FTPԶ����Դ���
-		localPanel = new LocalPanel(this); // ��ʼ��������Դ�������
-		uploadPanel = new UploadPanel(); // ��ʼ���ϴ��������
-		downloadPanel = new DownloadPanel(); // ��ʼ�����ض������
-		queuePanel = new QueuePanel(this); // ��ʼ���������
+		ftpPanel = new FtpPanel(this);
+		localPanel = new LocalPanel(this); 
 
 		JTabbedPane jTabbedPane1 = new JTabbedPane();
 		JMenuBar MenuBar = new JMenuBar();
@@ -162,14 +92,11 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		JMenuItem ftpDelMenuItem = new javax.swing.JMenuItem();
 		JMenuItem ftpRenameMenuItem = new javax.swing.JMenuItem();
 		JMenuItem newFolderMenuItem = new javax.swing.JMenuItem();
-		JMenu helpMenu = new javax.swing.JMenu();
-		JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
-		JMenuItem bugMenuItem = new javax.swing.JMenuItem();
 
-		setTitle("FTP�ϴ�����");
+		setTitle("基于RSA与DEC的FTP客户端");
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowOpened(java.awt.event.WindowEvent evt) {
-				formWindowOpened(evt);
+//				formWindowOpened(evt);
 			}
 
 			public void windowIconified(final WindowEvent e) {
@@ -193,7 +120,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		linkTo.setAction(LINK_TO_ACTION);
 		jToolBar1.add(linkTo);
 
-		cutLinkButton.setText("�Ͽ�");
+		cutLinkButton.setText("断开连接");
 		cutLinkButton.setEnabled(false);
 		cutLinkButton.setFocusable(false);
 		cutLinkButton.setAction(CUT_LINK_ACTION);
@@ -202,17 +129,17 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		jPanel1.add(jToolBar1);
 
 		shutdownButton = new JToggleButton();
-		shutdownButton.setText("�Զ��ػ�");
-		shutdownButton.setToolTipText("������ɺ��Զ��رռ����");
+		shutdownButton.setText("关闭");
+		shutdownButton.setToolTipText("关闭");
 		shutdownButton.setFocusable(false);
 		jToolBar1.add(shutdownButton);
 
-		jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-		jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4,
+		loginPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+		loginPanel.setLayout(new javax.swing.BoxLayout(loginPanel,
 				javax.swing.BoxLayout.LINE_AXIS));
 
-		jLabel1.setText("�����ַ��");
-		jPanel4.add(jLabel1);
+		ipLabel.setText("主机IP地址：");
+		loginPanel.add(ipLabel);
 
 		serverTextField.setText("192.168.1.128");
 		serverTextField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -220,10 +147,10 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 				LinkFTPKeyPressed(evt);
 			}
 		});
-		jPanel4.add(serverTextField);
+		loginPanel.add(serverTextField);
 
-		jLabel2.setText("�û���");
-		jPanel4.add(jLabel2);
+		usernameLabel.setText("用户名:");
+		loginPanel.add(usernameLabel);
 
 		userTextField.setText("mr");
 		userTextField.setMaximumSize(new java.awt.Dimension(200, 2147483647));
@@ -233,10 +160,10 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 				LinkFTPKeyPressed(evt);
 			}
 		});
-		jPanel4.add(userTextField);
+		loginPanel.add(userTextField);
 
-		jLabel3.setText("���룺");
-		jPanel4.add(jLabel3);
+		passwordLabel.setText("密码：");
+		loginPanel.add(passwordLabel);
 
 		PassField.setText("mrsoft");
 		PassField.setMaximumSize(new java.awt.Dimension(200, 2147483647));
@@ -246,10 +173,10 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 				LinkFTPKeyPressed(evt);
 			}
 		});
-		jPanel4.add(PassField);
+		loginPanel.add(PassField);
 
-		jLabel6.setText("�˿ڣ�");
-		jPanel4.add(jLabel6);
+		portLabel.setText("端口：");
+		loginPanel.add(portLabel);
 
 		portTextField.setText("21");
 		portTextField.setMaximumSize(new java.awt.Dimension(100, 2147483647));
@@ -259,9 +186,9 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 				LinkFTPKeyPressed(evt);
 			}
 		});
-		jPanel4.add(portTextField);
+		loginPanel.add(portTextField);
 
-		linkButton.setText("����");
+		linkButton.setText("连接");
 		linkButton.setFocusable(false);
 		linkButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		linkButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -270,9 +197,13 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 				linkButtonActionPerformed(evt);
 			}
 		});
-		jPanel4.add(linkButton);
+		loginPanel.add(linkButton);
 
-		jPanel1.add(jPanel4);
+		
+		
+		
+		
+		jPanel1.add(loginPanel);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -294,11 +225,6 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 
 		jSplitPane2.setLeftComponent(jSplitPane1);
 
-		jTabbedPane1.setMinimumSize(new java.awt.Dimension(40, 170));
-
-		jTabbedPane1.addTab("����", queuePanel);// ��Ӷ������
-		jTabbedPane1.addTab("���ϴ�", uploadPanel);// ����ϴ����
-		jTabbedPane1.addTab("������", downloadPanel);// ����������
 
 		jSplitPane2.setBottomComponent(jTabbedPane1);
 
@@ -311,12 +237,12 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		getContentPane().add(jSplitPane2, gridBagConstraints);
 
 		fileMenu.setMnemonic('f');
-		fileMenu.setText("�ļ�(F)");
+		fileMenu.setText("文件(F)");
 
 		ftpManageMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
 				java.awt.event.KeyEvent.VK_S,
 				java.awt.event.InputEvent.CTRL_MASK));
-		ftpManageMenuItem.setText("FTPվ�����(S)");
+		ftpManageMenuItem.setText("FTP站点管理(S)");
 		ftpManageMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -331,14 +257,14 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		linkToMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
 				java.awt.event.KeyEvent.VK_C,
 				java.awt.event.InputEvent.CTRL_MASK));
-		linkToMenuItem.setText("���ӵ�...(C)");
+		linkToMenuItem.setText("连接中...(C)");
 		linkToMenuItem.setAction(LINK_TO_ACTION);
 		fileMenu.add(linkToMenuItem);
 
 		cutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
 				java.awt.event.KeyEvent.VK_Z,
 				java.awt.event.InputEvent.CTRL_MASK));
-		cutMenuItem.setText("�Ͽ�(Z)");
+		cutMenuItem.setText("断开(Z)");
 		cutMenuItem.setAction(CUT_LINK_ACTION);
 		fileMenu.add(cutMenuItem);
 		fileMenu.add(jSeparator2);
@@ -346,7 +272,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
 				java.awt.event.KeyEvent.VK_X,
 				java.awt.event.InputEvent.CTRL_MASK));
-		exitMenuItem.setText("�˳�(X)");
+		exitMenuItem.setText("推出(X)");
 		exitMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -359,34 +285,34 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 
 		JMenu localMenu = new JMenu();
 		localMenu.setMnemonic('l');
-		localMenu.setText("����(L)");
+		localMenu.setText("本地(L)");
 
 		uploadMenuItem.setMnemonic('U');
-		uploadMenuItem.setText("�ϴ�(U)");
+		uploadMenuItem.setText("上传(U)");
 		uploadMenuItem.setAction(localPanel.getActionMap().get("uploadAction"));
 
 		localMenu.add(uploadMenuItem);
 		localMenu.add(jSeparator3);
 
 		createFolderMenuItem.setMnemonic('C');
-		createFolderMenuItem.setText("�½��ļ���(C)");
+		createFolderMenuItem.setText("新建文件夹(C)");
 		createFolderMenuItem.setAction(localPanel.getActionMap().get(
 				"createFolderAction"));
 		localMenu.add(createFolderMenuItem);
 
 		renameMenuItem.setMnemonic('R');
-		renameMenuItem.setText("������(R)");
+		renameMenuItem.setText("重命名文件夹(R)");
 		renameMenuItem.setAction(localPanel.getActionMap().get("renameAction"));
 		localMenu.add(renameMenuItem);
 
 		delMenuItem.setMnemonic('D');
-		delMenuItem.setText("ɾ��(D)");
+		delMenuItem.setText("删除(D)");
 		delMenuItem.setAction(localPanel.getActionMap().get("delAction"));
 		localMenu.add(delMenuItem);
 
 		JMenuItem localrefreshMenuItem = new JMenuItem();
 		localrefreshMenuItem.setMnemonic('R');
-		localrefreshMenuItem.setText("ˢ��(R)");
+		localrefreshMenuItem.setText("本地刷新(R)");
 		localrefreshMenuItem.setAction(localPanel.getActionMap().get(
 				"refreshAction"));
 		localMenu.add(localrefreshMenuItem);
@@ -394,53 +320,36 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		MenuBar.add(localMenu);
 
 		ftpMenu.setMnemonic('r');
-		ftpMenu.setText("Զ��(R)");
+		ftpMenu.setText("远程(R)");
 
 		downMenuItem.setMnemonic('U');
-		downMenuItem.setText("����(U)");
+		downMenuItem.setText("下载(U)");
 		downMenuItem.setAction(ftpPanel.getActionMap().get("downAction"));
 		ftpMenu.add(downMenuItem);
 		ftpMenu.add(jSeparator6);
 
 		ftpDelMenuItem.setMnemonic('D');
-		ftpDelMenuItem.setText("ɾ��(D)");
+		ftpDelMenuItem.setText("删除(D)");
 		ftpDelMenuItem.setAction(ftpPanel.getActionMap().get("delAction"));
 		ftpMenu.add(ftpDelMenuItem);
 
 		ftpRenameMenuItem.setMnemonic('R');
-		ftpRenameMenuItem.setText("������(R)");
+		ftpRenameMenuItem.setText("重命名(R)");
 		ftpRenameMenuItem
 				.setAction(ftpPanel.getActionMap().get("renameAction"));
 		ftpMenu.add(ftpRenameMenuItem);
 
 		newFolderMenuItem.setMnemonic('C');
-		newFolderMenuItem.setText("�½��ļ���(C)");
+		newFolderMenuItem.setText("新建文件夹(C)");
 		newFolderMenuItem.setAction(ftpPanel.getActionMap().get(
 				"createFolderAction"));
 		ftpMenu.add(newFolderMenuItem);
 
 		JMenuItem refreshMenuItem = new JMenuItem();
 		refreshMenuItem.setMnemonic('R');
-		refreshMenuItem.setText("ˢ��(R)");
+		refreshMenuItem.setText("刷新(R)");
 		refreshMenuItem.setAction(ftpPanel.getActionMap().get("refreshAction"));
 		ftpMenu.add(refreshMenuItem);
-
-		MenuBar.add(ftpMenu);
-
-		helpMenu.setText("����(H)");
-		aboutMenuItem.setMnemonic('a');
-		aboutMenuItem.setText("����(A)");
-		aboutMenuItem.addActionListener(new AboutItemAction(this));
-		helpMenu.add(aboutMenuItem);
-
-		bugMenuItem.setMnemonic('u');
-		bugMenuItem.setText("���󱨸�(U)");
-		bugMenuItem.addActionListener(new BugItemAction());
-		helpMenu.add(bugMenuItem);
-
-		MenuBar.add(helpMenu);
-
-		setJMenuBar(MenuBar);
 
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit()
 				.getScreenSize();
@@ -452,68 +361,60 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		return shutdownButton;
 	}
 
-	/**
-	 * ����װ�ص��¼����?��
-	 */
-	private void formWindowOpened(java.awt.event.WindowEvent evt) {
-		jSplitPane1.setDividerLocation(0.50);
-		localPanel.getLocalDiskComboBox().setSelectedIndex(1);
-		localPanel.getLocalDiskComboBox().setSelectedIndex(0);
-	}
+//	private void formWindowOpened(java.awt.event.WindowEvent evt) {
+//		jSplitPane1.setDividerLocation(0.50);
+//		localPanel.getLocalDiskComboBox().setSelectedIndex(1);
+//		localPanel.getLocalDiskComboBox().setSelectedIndex(0);
+//	}
 
-	/**
-	 * �����С������¼����?��
-	 */
 	private void formComponentResized(java.awt.event.ComponentEvent evt) {
 		jSplitPane1.setDividerLocation(0.50);
 	}
 
-	/**
-	 * ���Ӱ�ť���¼����?��
-	 */
+	
+	
+	//连接按钮触发
 	private void linkButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		try {
-			String server = serverTextField.getText(); // ��ȡ��������ַ
+			String server = serverTextField.getText(); 
 			if (server == null) {
 				return;
 			}
-			String portStr = portTextField.getText(); // ��ȡ�˿ں�
+			String portStr = portTextField.getText();
 			if (portStr == null) {
 				portStr = "21";
 			}
 			int port = Integer.parseInt(portStr.trim());
-			String userStr = userTextField.getText(); // ��ȡ�û���
+			String userStr = userTextField.getText(); 
 			userStr = userStr == null ? "" : userStr.trim();
-			String passStr = PassField.getText(); // ��ȡ����
+			String passStr = PassField.getText();
 			passStr = passStr == null ? "" : passStr.trim();
 			cutLinkButton.doClick();
 			ftpClient = new FtpClient();
-			ftpClient.openServer(server.trim(), port); // ���ӷ�����
-			ftpClient.login(userStr, passStr); // ��¼������
-			ftpClient.binary(); // ʹ�ö����ƴ���ģʽ
-			if (ftpClient.serverIsOpen()) { // ������ӳɹ�
-				CUT_LINK_ACTION.setEnabled(true); // ���öϿ���ť����
-			} else { // ����
-				CUT_LINK_ACTION.setEnabled(false); // ���öϿ���ť������
-				return; // �������¼�����
+			ftpClient.openServer(server.trim(), port); 
+			ftpClient.login(userStr, passStr);
+			ftpClient.binary(); 
+			if (ftpClient.serverIsOpen()) { 
+				CUT_LINK_ACTION.setEnabled(true);
+			} else {
+				CUT_LINK_ACTION.setEnabled(false); 
+				return;
 			}
-			// ���ñ�����Դ��������FTP������Ϣ
+
 			localPanel.setFtpClient(server, port, userStr, passStr);
-			// �����ϴ���ť����
+
 			localPanel.getActionMap().get("uploadAction").setEnabled(true);
-			ftpPanel.setFtpClient(ftpClient);// ����FTP��Դ��������FTP������Ϣ
-			// �������ذ�ť����
+			ftpPanel.setFtpClient(ftpClient);
+
 			ftpPanel.getActionMap().get("downAction").setEnabled(true);
-			ftpPanel.refreshCurrentFolder();// ˢ��FTP��Դ�������ĵ�ǰ�ļ���
-			queuePanel.startQueue(); // ������������߳�
+			ftpPanel.refreshCurrentFolder();
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	/**
-	 * ����FTP��ص��ı��� �������Ļس��¼�
-	 */
+	
 	private void LinkFTPKeyPressed(java.awt.event.KeyEvent evt) {
 		if (evt.getKeyChar() == '\n') {
 			linkButton.doClick();
@@ -543,29 +444,14 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		return ftpPanel;
 	}
 
-	public QueuePanel getQueuePanel() {
-		return queuePanel;
-	}
-
-	public UploadPanel getUploadPanel() {
-		return uploadPanel;
-	}
-
-	public DownloadPanel getDownloadPanel() {
-		return downloadPanel;
-	}
-
 	public FtpClient getFtpClient() {
 		return ftpClient;
 	}
 
-	/**
-	 * ����FTP������Ϣ�ķ�������FTPվ�����������
-	 */
 	public void setLinkInfo(SiteInfoBean bean) {
-		serverTextField.setText(bean.getServer()); // ���������ַ
-		portTextField.setText(bean.getPort() + ""); // ���ö˿ں�
-		userTextField.setText(bean.getUserName()); // �����û���
+		serverTextField.setText(bean.getServer());
+		portTextField.setText(bean.getPort() + "");
+		userTextField.setText(bean.getUserName());
 		PassField.setText("");
 		PassField.requestFocus();
 	}

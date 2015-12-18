@@ -1,8 +1,3 @@
-/*
- * LocalPanel.java
- *
- * Created on 2008年6月20日, 下午2:42
- */
 package com.lzw.ftp.panel.local;
 
 import java.awt.Color;
@@ -29,13 +24,9 @@ import javax.swing.table.TableStringConverter;
 
 import com.lzw.ftp.FTP_Client_Frame;
 import com.lzw.ftp.extClass.DiskFile;
-import com.lzw.ftp.extClass.FtpClient;
 import com.lzw.ftp.panel.FTPTableCellRanderer;
 import com.lzw.ftp.panel.ftp.TableConverter;
 
-/**
- * @author lzwJava
- */
 public class LocalPanel extends javax.swing.JPanel {
 
 	Queue<Object[]> queue = new LinkedList<Object[]>();

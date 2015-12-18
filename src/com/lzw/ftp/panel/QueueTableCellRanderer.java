@@ -1,24 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.lzw.ftp.panel;
 
 import java.awt.Component;
 
-import com.lzw.ftp.extClass.FileInterface;
-import com.lzw.ftp.extClass.ProgressArg;
-
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-/**
- * @author lzwJava
- */
+import com.lzw.ftp.extClass.ProgressArg;
+
 public class QueueTableCellRanderer extends JProgressBar implements
 		TableCellRenderer {
 	public QueueTableCellRanderer() {
@@ -41,7 +31,7 @@ public class QueueTableCellRanderer extends JProgressBar implements
 		else {
 			if (getMaximum() == -1)
 				return new JLabel();
-			return new JLabel("Íê³É");
+			return new JLabel("ï¿½ï¿½ï¿½");
 		}
 	}
 }

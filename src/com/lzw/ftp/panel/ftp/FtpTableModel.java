@@ -11,7 +11,7 @@ class FtpTableModel extends DefaultTableModel {
 	boolean[] canEdit = new boolean[] { false, false, false };
 
 	FtpTableModel() {
-		super(new Object[][] {}, new String[] { "ÎÄ¼şÃû", "´óĞ¡", "ÈÕÆÚ" });
+		super(new Object[][] {}, new String[] { "æ–‡ä»¶å", "å¤§å°", "æ—¥æœŸ" });
 	}
 
 	public Class getColumnClass(int columnIndex) {
