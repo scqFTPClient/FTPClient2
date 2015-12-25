@@ -2,5 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/media/fbe8d6f4-be19-491f-9a1c-9714740a77ef/download/FTPCLIENT2/lib/commons-net-3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

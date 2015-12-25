@@ -7,61 +7,39 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-/**
- * ÖØÃüÃû°´Å¥µÄ¶¯×÷´¦ÀíÆ÷
- */
 class RennameAction extends AbstractAction {
-	private LocalPanel localPanel; // ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
+	private LocalPanel localPanel; 
 
-	/**
-	 * ¹¹Ôì·½·¨
-	 * 
-	 * @param localPanel
-	 *            ±¾µØ×ÊÔ´¹ÜÀíÃæ°å
-	 * @param name
-	 *            ¶¯×÷´¦ÀíÆ÷µÄÃû³Æ
-	 * @param icon
-	 *            ¶¯×÷´¦ÀíÆ÷µÄÍ¼±ê
-	 */
 	public RennameAction(LocalPanel localPanel, String name, Icon icon) {
-		super(name, icon); // µ÷ÓÃ¸¸ÀàµÄ¹¹Ôì·½·¨
-		this.localPanel = localPanel; // ¸³Öµ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
+		super(name, icon); 
+		this.localPanel = localPanel;
 	}
 
-	/**
-	 * ÖØÃüÃû¶¯×÷µÄÊÂ¼ş´¦Àí·½·¨
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// »ñÈ¡±¾µØ×ÊÔ´±í¸ñµÄÑ¡ÔñĞĞºÅ
 		int selRow = this.localPanel.localDiskTable.getSelectedRow();
 		if (selRow < 0)
 			return;
-		// »ñÈ¡Ñ¡ÔñĞĞµÄµÚÒ»¸öµ¥ÔªÖµ
 		Object value = this.localPanel.localDiskTable.getValueAt(selRow, 0);
 		if (!(value instanceof File))
 			return;
-		// ½«¸Ãµ¥ÔªÖµ×ª»»ÎªFileÀàµÄ¶ÔÏó
 		File file = (File) value;
-		// Ê¹ÓÃ¶Ô»°¿ò½ÓÊÕÓÃ»§ÈçÈëµÄĞÂÎÄ¼şÃû
 		String fileName = JOptionPane
-				.showInputDialog("ÇëÊäÈëĞÂÎÄ¼şÃû", file.getName());
+				.showInputDialog("è¯·è¾“å…¥æ–°æ–‡ä»¶å", file.getName());
 		if (fileName == null)
 			return;
-		// ´´½¨ĞÂÃû³ÆµÄÎÄ¼ş
+
 		File renFile = new File(file.getParentFile(), fileName);
 		System.out.println(renFile);
-		boolean isRename = file.renameTo(renFile); // ½«Ô­ÎÄ¼şÖØÃüÃû
-		// Ë¢ĞÂÎÄ¼ş¼Ğ
+		boolean isRename = file.renameTo(renFile);
+
 		this.localPanel.refreshFolder(file.getParentFile());
 		if (isRename) {
-			JOptionPane.showMessageDialog(this.localPanel, "ÖØÃüÃûÎª" + fileName
-					+ "³É¹¦¡£");
+			JOptionPane.showMessageDialog(this.localPanel, "é‡å‘½åä¸º" + fileName
+					+ "æˆåŠŸ");
 		} else {
-			JOptionPane.showMessageDialog(this.localPanel, "ÎŞ·¨ÖØÃüÃûÎª" + fileName
-					+ "¡£", "ÎÄ¼şÖØÃüÃû", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this.localPanel, "æ— æ³•é‡å‘½åä¸º" + fileName
+					+ "ã€‚", "æ–‡ä»¶é‡å‘½å", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

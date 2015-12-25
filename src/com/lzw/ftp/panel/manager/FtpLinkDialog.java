@@ -54,7 +54,7 @@ public class FtpLinkDialog extends JDialog implements ActionListener {
 		loadSiteProperties();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		setTitle("���ӵ�FTPվ��Ի���");
+		setTitle("FTP站点管理");
 		BorderLayout borderLayout = new BorderLayout();
 		borderLayout.setHgap(5);
 		setLayout(borderLayout);
@@ -69,10 +69,10 @@ public class FtpLinkDialog extends JDialog implements ActionListener {
 		JPanel controlPanel = new JPanel();
 		BoxLayout boxLayout = new BoxLayout(controlPanel, BoxLayout.Y_AXIS);
 		controlPanel.setLayout(boxLayout);
-		JButton linkButton = new JButton("����");
+		JButton linkButton = new JButton("连接");
 		linkButton.setActionCommand("link");
 		linkButton.addActionListener(this);
-		JButton lookButton = new JButton("�鿴");
+		JButton lookButton = new JButton("编辑");
 		lookButton.setActionCommand("look");
 		lookButton.addActionListener(this);
 		controlPanel.add(linkButton);

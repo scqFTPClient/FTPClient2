@@ -24,13 +24,13 @@ import javax.swing.table.TableStringConverter;
 import sun.net.TelnetInputStream;
 
 import com.lzw.ftp.FTP_Client_Frame;
-import com.lzw.ftp.extClass.FtpClient;
+import com.lzw.ftp.extClass.MyFTPClient;
 import com.lzw.ftp.extClass.FtpFile;
 import com.lzw.ftp.panel.FTPTableCellRanderer;
 
 public class FtpPanel extends javax.swing.JPanel {
 
-	FtpClient ftpClient;
+	MyFTPClient ftpClient;
 	private javax.swing.JButton createFolderButton;
 	private javax.swing.JButton delButton;
 	private javax.swing.JButton downButton;
@@ -190,7 +190,7 @@ public class FtpPanel extends javax.swing.JPanel {
 					model.addRow(new Object[] { new FtpFile("..", pwd, true),
 							"", "" });
 					BufferedReader br = new BufferedReader(
-							new InputStreamReader(list)); // �����ַ�������
+							new InputStreamReader(list));
 					String data = null;
 			
 					while ((data = br.readLine()) != null) {
@@ -224,14 +224,14 @@ public class FtpPanel extends javax.swing.JPanel {
 	}
 
 
-	public void setFtpClient(FtpClient ftpClient) {
+	public void setFtpClient(MyFTPClient ftpClient) {
 		this.ftpClient = ftpClient;
 
 		final Timer timer = new Timer(3000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					final FtpClient ftpClient = FtpPanel.this.ftpClient;
+					final MyFTPClient ftpClient = FtpPanel.this.ftpClient;
 					if (ftpClient != null && ftpClient.serverIsOpen()) {
 						ftpClient.noop();
 					}

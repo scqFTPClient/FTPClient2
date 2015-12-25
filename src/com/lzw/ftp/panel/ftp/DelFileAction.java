@@ -9,74 +9,54 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import com.lzw.ftp.extClass.FtpClient;
+import com.lzw.ftp.extClass.MyFTPClient;
 import com.lzw.ftp.extClass.FtpFile;
 import com.lzw.ftp.panel.local.LocalPanel;
 
-/**
- * FTPÃæ°åµÄÉ¾³ý°´Å¥µÄ¶¯×÷´¦ÀíÆ÷
- */
 class DelFileAction extends AbstractAction {
 	private FtpPanel ftpPanel;
 
-	/**
-	 * É¾³ý¶¯×÷´¦ÀíÆ÷µÄ¹¹Ôì·½·¨
-	 * 
-	 * @param ftpPanel
-	 *            - FTP×ÊÔ´¹ÜÀíÃæ°å
-	 * @param name
-	 *            - ¶¯×÷Ãû³Æ
-	 * @param icon
-	 *            - Í¼±ê
-	 */
 	public DelFileAction(FtpPanel ftpPanel, String name, Icon icon) {
 		super(name, icon);
 		this.ftpPanel = ftpPanel;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// »ñÈ¡ÏÔÊ¾FTP×ÊÔ´ÁÐ±íµÄ±í¸ñ×é¼þµ±Ç°Ñ¡ÔñµÄËùÓÐÐÐ
 		final int[] selRows = ftpPanel.ftpDiskTable.getSelectedRows();
 		if (selRows.length < 1)
 			return;
-		int confirmDialog = JOptionPane.showConfirmDialog(ftpPanel, "È·¶¨ÒªÉ¾³ýÂð£¿");
+		int confirmDialog = JOptionPane.showConfirmDialog(ftpPanel, "ç¡®å®šè¦åˆ é™¤å—ï¼Ÿ");
 		if (confirmDialog == JOptionPane.YES_OPTION) {
 			Runnable runnable = new Runnable() {
-				/**
-				 * É¾³ý·þÎñÆ÷ÎÄ¼þµÄ·½·¨
-				 * 
-				 * @param file
-				 *            - ÎÄ¼þÃû³Æ
-				 */
 				private void delFile(FtpFile file) {
-					FtpClient ftpClient = ftpPanel.ftpClient; // »ñÈ¡ftpClientÊµÀý
+					MyFTPClient ftpClient = ftpPanel.ftpClient; 
 					try {
-						if (file.isFile()) { // Èç¹ûÉ¾³ýµÄÊÇÎÄ¼þ
+						if (file.isFile()) {
 							ftpClient.sendServer("DELE " + file.getName()
-									+ "\r\n"); // ·¢ËÍÉ¾³ýÎÄ¼þµÄÃüÁî
-							ftpClient.readServerResponse(); // ½ÓÊÕ·µ»Ø±àÂë
-						} else if (file.isDirectory()) { // Èç¹ûÉ¾³ýµÄÊÇÎÄ¼þ¼Ð
-							ftpClient.cd(file.getName()); // ½øÈëµ½¸ÃÎÄ¼þ¼Ð
+									+ "\r\n"); 
+							ftpClient.readServerResponse(); 
+						} else if (file.isDirectory()) { 
+							ftpClient.cd(file.getName());
 							InputStreamReader list = new InputStreamReader(
-									ftpClient.list()); // ¶ÁÈ¡ÎÄ¼þÁÐ±í
+									ftpClient.list());
 							BufferedReader br = new BufferedReader(list);
 							String nameStr = null;
-							while ((nameStr = br.readLine()) != null) {// ½âÎöÃ¿¸öÎÄ¼þ
-								Thread.sleep(0, 100); // Ïß³ÌÐÝÃß
-								String name = nameStr.substring(39); // ½âÎöÎÄ¼þÃû
-								String size = nameStr.substring(18, 39);// ½âÎöÎÄ¼þ´óÐ¡
-								FtpFile ftpFile = new FtpFile(); // ´´½¨ÎÄ¼þ¶ÔÏó
-								ftpFile.setName(name); // ÉèÖÃÎÄ¼þÃû
-								ftpFile.setPath(file.getAbsolutePath());// ÉèÖÃÎÄ¼þÂ·¾¶
-								ftpFile.setSize(size); // ÉèÖÃÎÄ¼þ´óÐ¡
-								delFile(ftpFile); // µÝ¹éÉ¾³ýÎÄ¼þ»òÎÄ¼þ¼Ð
+							while ((nameStr = br.readLine()) != null) {
+								Thread.sleep(0, 100);
+								String name = nameStr.substring(39); 
+								String size = nameStr.substring(18, 39);
+								FtpFile ftpFile = new FtpFile();
+								ftpFile.setName(name);
+								ftpFile.setPath(file.getAbsolutePath());
+								ftpFile.setSize(size);
+								delFile(ftpFile);
 							}
-							list.close();// ¹Ø±Õ¶ÁÈ¡ÎÄ¼þÁÐ±íµÄÊäÈëÁ÷
+							list.close();
 							br.close();
-							ftpClient.cdUp(); // ·µ»ØÉÏ²ãÎÄ¼þ¼Ð
+							ftpClient.cdUp();
 							ftpClient.sendServer("RMD " + file.getName()
-									+ "\r\n"); // ·¢ËÍÉ¾³ýÎÄ¼þ¼ÐÖ¸Áî
-							ftpClient.readServerResponse(); // ½ÓÊÕ·µ»ØÂë
+									+ "\r\n");
+							ftpClient.readServerResponse();
 						}
 					} catch (Exception ex) {
 						Logger.getLogger(LocalPanel.class.getName()).log(
@@ -84,33 +64,23 @@ class DelFileAction extends AbstractAction {
 					}
 				}
 
-				/**
-				 * Ïß³ÌµÄÖ÷Ìå·½·¨
-				 * 
-				 * @see java.lang.Runnable#run()
-				 */
 				public void run() {
-					// ±éÀúÏÔÊ¾FTP×ÊÔ´µÄ±í¸ñµÄËùÓÐÑ¡ÔñÐÐ
 					for (int i = 0; i < selRows.length; i++) {
-						// »ñÈ¡Ã¿ÐÐµÄµÚÒ»¸öµ¥ÔªÖµ£¬²¢×ª»»ÎªFtpFileÀàÐÍ
 						final FtpFile file = (FtpFile) ftpPanel.ftpDiskTable
 								.getValueAt(selRows[i], 0);
 						if (file != null) {
-							delFile(file); // µ÷ÓÃÉ¾³ýÎÄ¼þµÄµÝ¹é·½·¨
+							delFile(file);
 							try {
-								// Ïò·þÎñÆ÷·¢É¾³ýÎÄ¼þ¼ÐµÄ·½·¨
 								ftpPanel.ftpClient.sendServer("RMD "
 										+ file.getName() + "\r\n");
-								// ¶ÁÈ¡FTP·þÎñÆ÷µÄ·µ»ØÂë
 								ftpPanel.ftpClient.readServerResponse();
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
 						}
 					}
-					// Ë¢ÐÂFTP·þÎñÆ÷×ÊÔ´ÁÐ±í
 					DelFileAction.this.ftpPanel.refreshCurrentFolder();
-					JOptionPane.showMessageDialog(ftpPanel, "É¾³ý³É¹¦¡£");
+					JOptionPane.showMessageDialog(ftpPanel, "åˆ é™¤æˆåŠŸ");
 				}
 			};
 			new Thread(runnable).start();

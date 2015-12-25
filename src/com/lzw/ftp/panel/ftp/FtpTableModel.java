@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.lzw.ftp.panel.ftp;
 
 import javax.swing.table.DefaultTableModel;

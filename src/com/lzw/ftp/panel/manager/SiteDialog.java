@@ -18,94 +18,63 @@ import javax.swing.border.EmptyBorder;
 
 import com.lzw.ftp.extClass.SiteInfoBean;
 
-/**
- * @author Li Zhong Wei ´´½¨Î¬»¤FTPÕ¾µãµÄ¶Ô»°¿ò
- */
 public class SiteDialog extends JDialog implements ActionListener {
 
-	private FtpSiteDialog dialog; // ±£´æ¸¸´°ÌåµÄÒıÓÃ¶ÔÏó
-	private JTextField siteNameField; // Õ¾µãÃû³ÆÎÄ±¾¿ò×é¼ş
-	private JTextField siteAddressField;// Õ¾µãµØÖ·ÎÄ±¾¿ò×é¼ş
-	private JTextField portField; // ¶Ë¿ÚºÅÎÄ±¾¿ò×é¼ş
-	private JTextField loginUserField; // µÇÂ¼ÓÃ»§ÎÄ±¾¿ò×é¼ş
-	private SiteInfoBean siteBean; // Õ¾µãĞÅÏ¢µÄJavaBean¶ÔÏó
+	private FtpSiteDialog dialog; 
+	private JTextField siteNameField;
+	private JTextField siteAddressField;
+	private JTextField portField;
+	private JTextField loginUserField;
+	private SiteInfoBean siteBean;
 
-	/**
-	 * ´´½¨Ìí¼ÓFTPÕ¾µã¶Ô»°¿ò
-	 * 
-	 * @param frame
-	 *            ¶Ô»°¿òµÄ¸¸´°Ìå
-	 */
 	public SiteDialog(FtpSiteDialog frame) {
-		super(frame); // µ÷ÓÃ¸¸ÀàµÄ¹¹Ôì·½·¨
-		dialog = frame; // ¸³Öµ¸¸´°Ìå¶ÔÏó
-		initComponents(); // µ÷ÓÃ³õÊ¼»¯¶Ô»°¿ò½çÃæµÄ·½·¨
+		super(frame); 
+		dialog = frame;
+		initComponents();
 	}
 
-	/**
-	 * ´´½¨±à¼­FTPÕ¾µã¶Ô»°¿ò
-	 * 
-	 * @param frame
-	 *            ¸¸´°ÌåµÄÒıÓÃ
-	 * @param siteBean
-	 *            FTPÕ¾µãĞÅÏ¢µÄJavaBean
-	 */
 	public SiteDialog(FtpSiteDialog frame, SiteInfoBean siteBean) {
 		this(frame);
-		dialog = frame; // ¸³Öµ¸¸´°ÌåÒıÓÃ¶ÔÏó
-		this.siteBean = siteBean; // ¸³ÖµFTPÕ¾µãÒıÓÃ¶ÔÏó
-		initInput(); // ³õÊ¼»¯½çÃæ×é¼şµÄÄÚÈİ
-		setTitle("±à¼­FTPÕ¾µã"); // ÉèÖÃ¶Ô»°¿òµÄ±êÌâ
+		dialog = frame;
+		this.siteBean = siteBean;
+		initInput();
+		setTitle("ç¼–è¾‘FTPç«™ç‚¹"); // ï¿½ï¿½ï¿½Ã¶Ô»ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½
 	}
 
-	/**
-	 * ´´½¨±à¼­FTPÕ¾µã¶Ô»°¿ò
-	 * 
-	 * @param frame
-	 *            ¸¸´°ÌåµÄÒıÓÃ
-	 * @param bean
-	 *            FTPÕ¾µãĞÅÏ¢µÄJavaBean
-	 */
 	public SiteDialog(FtpLinkDialog frame, SiteInfoBean bean) {
-		super(frame); // µ÷ÓÃ¸¸Àà¹¹Ôì·½·¨
-		this.siteBean = bean; // ¸³ÖµFTPÕ¾µãĞÅÏ¢µÄÒıÓÃ
-		initComponents(); // µ÷ÓÃ³õÊ¼»¯³ÌĞò½çÃæµÄ·½·¨
-		initInput(); // ³õÊ¼»¯½çÃæËùÓĞÎÄ±¾¿ò×é¼şµÄÄÚÈİ
-		setReadOnly(); // µ÷ÓÃÉèÖÃ½çÃæ×é¼şÖ»¶ÁµÄ·½·¨
-		setTitle("²é¿´FTPÕ¾µã"); // ÉèÖÃ¶Ô»°¿òµÄ±êÌâ
+		super(frame);
+		this.siteBean = bean; 
+		initComponents();
+		initInput();
+		setReadOnly(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½
+		setTitle("ç¼–è¾‘FTPç«™ç‚¹"); // ï¿½ï¿½ï¿½Ã¶Ô»ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½
 	}
 
-	/**
-	 * ÉèÖÃ´°ÌåËùÓĞÎÄ±¾¿ò×é¼şÖ»¶ÁµÄ·½·¨
-	 */
 	private void setReadOnly() {
-		siteNameField.setEditable(false); // ÉèÖÃÕ¾µãÃû³ÆÎÄ±¾¿òÖ»¶Á
-		siteAddressField.setEditable(false); // ÉèÖÃFTPµØÖ·Ö»¶Á
-		loginUserField.setEditable(false); // ÉèÖÃµÇÂ¼ÓÃ»§ÃûÖ»¶Á
-		portField.setEditable(false); // ÉèÖÃ¶Ë¿ÚºÅÎÄ±¾¿òÖ»¶Á
+		siteNameField.setEditable(false);
+		siteAddressField.setEditable(false); 
+		loginUserField.setEditable(false);
+		portField.setEditable(false);
 	}
 
-	/**
-	 * ³õÊ¼»¯´°Ìå½çÃæµÄ·½·¨
-	 */
 	public void initComponents() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		setTitle("Ìí¼ÓFTPÕ¾µã");
+		setTitle("ç¼–è¾‘FTPç«™ç‚¹");
 		JPanel content = new JPanel();
 		content.setLayout(new GridLayout(0, 1, 4, 3));
 
-		content.add(new JLabel("Õ¾µãÃû³Æ£º"));
+		content.add(new JLabel("ç«™ç‚¹åç§°"));
 		siteNameField = new JTextField();
 		content.add(siteNameField);
-		content.add(new JLabel("Õ¾µãµØÖ·£º"));
+		content.add(new JLabel("ç«™ç‚¹åœ°å€"));
 		siteAddressField = new JTextField();
 		content.add(siteAddressField);
-		content.add(new JLabel("¶Ë¿ÚºÅ£º"));
+		content.add(new JLabel("ç«¯å£å·"));
 		portField = new JTextField();
 		portField.setText("21");
 		content.add(portField);
-		content.add(new JLabel("µÇÂ¼ÓÃ»§£º"));
+		content.add(new JLabel("ç™»å½•ç”¨æˆ·"));
 		loginUserField = new JTextField();
 		content.add(loginUserField);
 
@@ -114,10 +83,10 @@ public class SiteDialog extends JDialog implements ActionListener {
 		layout.setHgap(20);
 		panel.setLayout(layout);
 		final Insets insets = new Insets(0, 8, 0, 8);
-		JButton okButton = new JButton("È·¶¨");
+		JButton okButton = new JButton("ç¡®å®š");
 		okButton.setActionCommand("ok");
 		okButton.addActionListener(this);
-		JButton cancelButton = new JButton("ÖØÖÃ");
+		JButton cancelButton = new JButton("å–æ¶ˆ");
 		cancelButton.setActionCommand("cancel");
 		cancelButton.addActionListener(this);
 		cancelButton.setMargin(insets);
@@ -134,76 +103,62 @@ public class SiteDialog extends JDialog implements ActionListener {
 		setVisible(true);
 	}
 
-	/**
-	 * ½çÃæ°´Å¥µÄÊÂ¼ş´¦Àí·½·¨
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand(); // »ñÈ¡°´Å¥µÄcommandÊôĞÔ
-		if (command.equals("ok")) { // Èç¹ûÊÇÈ·¶¨°´Å¥
+		String command = e.getActionCommand();
+		if (command.equals("ok")) {
 			try {
 				if (dialog == null) {
 					dispose();
 					return;
 				}
-				// »ñÈ¡½çÃæËùÓĞÎÄ±¾¿òµÄÄÚÈİ
+
 				String siteName = siteNameField.getText().trim();
 				String server = siteAddressField.getText().trim();
 				String userName = loginUserField.getText().trim();
 				String portStr = portField.getText().trim();
-				// ÅĞ¶ÏÊÇ·ñÌîĞ´ÁËÈ«²¿ÎÄ±¾¿ò
+
 				if (siteName.isEmpty() || server.isEmpty()
 						|| userName.isEmpty() || portStr.isEmpty()) {
-					JOptionPane.showMessageDialog(this, "ÇëÌîĞ´È«²¿ĞÅÏ¢");
+					JOptionPane.showMessageDialog(this, "ç«™ç‚¹åä¸èƒ½ä¸ºç©º");
 					return;
 				}
 				int port = Integer.valueOf(portStr);
-				// ´´½¨FTPÕ¾µãĞÅÏ¢µÄJavaBean¶ÔÏó
 				SiteInfoBean bean = new SiteInfoBean(siteName, server, port,
 						userName);
-				// Èç¹û¶Ô»°¿òµÄsiteBean²»Îª¿Õ
 				if (siteBean != null)
-					bean.setId(siteBean.getId()); // ÉèÖÃFTPÕ¾µãµÄID±àºÅ
-				dialog.addSite(bean); // µ÷ÓÃ¸¸´°ÌåµÄ addSite·½·¨Ìí¼ÓÕ¾µã
-				dialog.loadSiteList(); // µ÷ÓÃ¸¸´°ÌåµÄloadSiteList·½·¨ÖØÔØÕ¾µãÁĞ±í
+					bean.setId(siteBean.getId());
+				dialog.addSite(bean);
+				dialog.loadSiteList();
 				dispose();
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 				return;
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "ÇëÕıÈ·ÌîĞ´¶Ë¿ÚºÅĞÅÏ¢");
+				JOptionPane.showMessageDialog(this, "æ·»åŠ æˆåŠŸ");
 				ex.printStackTrace();
 				return;
 			}
 		}
-		if (command.equals("cancel")) { // Èç¹ûÊÇÖØÖÃ°´Å¥
-			if (siteBean == null) // Èç¹û¶Ô»°¿òµÄsiteBeanÊôĞÔÎª¿Õ
-				clearInput(); // µ÷ÓÃÇå³ıÎÄ±¾¿òÄÚÈİµÄ·½·¨
+		if (command.equals("cancel")) {
+			if (siteBean == null)
+				clearInput(); 
 			else
-				// ·ñÔò
-				initInput(); // ³õÊ¼»¯½çÃæÎÄ±¾¿òÄÚÈİ
+				initInput(); 
 		}
 	}
 
-	/**
-	 * Çå³ı½çÃæËùÓĞÎÄ±¾¿òÄÚÈİµÄ·½·¨
-	 */
 	private void clearInput() {
-		siteNameField.setText(""); // Çå³ıÕ¾µãÃû³Æ
-		siteAddressField.setText(""); // Çå³ıÖ÷»úµØÖ·
-		loginUserField.setText(""); // Çå³ıµÇÂ¼ÓÃ»§
-		portField.setText(""); // Çå³ı¶Ë¿ÚºÅ
+		siteNameField.setText("");
+		siteAddressField.setText("");
+		loginUserField.setText("");
+		portField.setText("");
 	}
 
-	/**
-	 * ³õÊ¼»¯½çÃæ×é¼şÄÚÈİµÄ·½·¨
-	 */
 	private void initInput() {
-		siteNameField.setText(siteBean.getSiteName()); // ÉèÖÃÕ¾µãÃû³Æ
-		siteAddressField.setText(siteBean.getServer()); // ÉèÖÃFTPµØÖ·
-		loginUserField.setText(siteBean.getUserName()); // ÉèÖÃµÇÂ¼ÓÃ»§
-		portField.setText(siteBean.getPort() + ""); // ÉèÖÃ¶Ë¿ÚºÅ
+		siteNameField.setText(siteBean.getSiteName());
+		siteAddressField.setText(siteBean.getServer());
+		loginUserField.setText(siteBean.getUserName());
+		portField.setText(siteBean.getPort() + "");
 	}
 }

@@ -9,53 +9,33 @@ import javax.swing.JOptionPane;
 import com.lzw.ftp.extClass.DiskFile;
 import com.lzw.ftp.extClass.FtpFile;
 
-/**
- * ÉÏ´«ÎÄ¼şµÄ¶¯×÷´¦ÀíÆ÷
- */
 class UploadAction extends AbstractAction {
-	private LocalPanel localPanel; // ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
+	private LocalPanel localPanel;
 
-	/**
-	 * ¹¹Ôì·½·¨
-	 * 
-	 * @param localPanel
-	 *            ±¾µØ×ÊÔ´¹ÜÀíÃæ°å
-	 * @param name
-	 *            ¶¯×÷µÄÃû³Æ
-	 * @param icon
-	 *            ¶¯×÷µÄÍ¼±ê
-	 */
 	public UploadAction(LocalPanel localPanel, String name, Icon icon) {
-		super(name, icon); // µ÷ÓÃ¸¸Àà¹¹Ôì·½·¨
-		this.localPanel = localPanel; // ¸³Öµ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
-		setEnabled(false); // ÉèÖÃ°´Å¥²»¿ÉÓÃ
+		super(name, icon);
+		this.localPanel = localPanel;
+		setEnabled(false);
 	}
 
-	/**
-	 * ÉÏ´«ÎÄ¼ş¶¯×÷µÄÊÂ¼ş´¦Àí·½·¨
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	public void actionPerformed(java.awt.event.ActionEvent evt) {
-		// »ñÈ¡ÓÃ»§Ñ¡ÔñµÄ¶à¸öÎÄ¼ş»òÎÄ¼ş¼Ğ
 		int[] selRows = this.localPanel.localDiskTable.getSelectedRows();
 		if (selRows.length < 1) {
-			JOptionPane.showMessageDialog(this.localPanel, "ÇëÑ¡ÔñÉÏ´«µÄÎÄ¼ş»òÎÄ¼ş¼Ğ");
+			JOptionPane.showMessageDialog(this.localPanel, "è¯·é€‰æ‹©ä¸Šä¼ çš„æ–‡ä»¶æˆ–æ–‡ä»¶å¤¹");
 			return;
 		}
-		// »ñÈ¡FTP·şÎñÆ÷µÄµ±Ç°Â·¾¶
+
 		String pwd = this.localPanel.frame.getFtpPanel().getPwd();
-		// ´´½¨FTPµ±Ç°Â·¾¶µÄÎÄ¼ş¼Ğ¶ÔÏó
+
 		FtpFile ftpFile = new FtpFile("", pwd, true);
-		// ±éÀú±¾µØ×ÊÔ´µÄ±í¸ñ
+
 		for (int i = 0; i < selRows.length; i++) {
 			Object valueAt = this.localPanel.localDiskTable.getValueAt(
-					selRows[i], 0); // »ñÈ¡±í¸ñÑ¡ÔñĞĞµÄµÚÒ»ÁĞÊı¾İ
+					selRows[i], 0); 
 			if (valueAt instanceof DiskFile) {
 				final DiskFile file = (DiskFile) valueAt;
-				// »ñÈ¡±¾µØÃæ°åÀàÖĞµÄ¶ÓÁĞ£¬¸Ã¶ÓÁĞÊÇLinkedListÀàµÄÊµÀı¶ÔÏó
 				Queue<Object[]> queue = this.localPanel.queue;
-				queue.offer(new Object[] { file, ftpFile });// Ö´ĞĞoffer·½·¨Ïò¶ÓÁĞÎ²Ìí¼Ó¶ÔÏó
+				queue.offer(new Object[] { file, ftpFile });
 			}
 		}
 	}

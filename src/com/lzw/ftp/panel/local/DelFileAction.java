@@ -11,72 +11,47 @@ import javax.swing.JOptionPane;
 
 import com.lzw.ftp.extClass.DiskFile;
 
-/**
- * É¾³ı±¾µØÎÄ¼şµÄ¶¯×÷´¦ÀíÆ÷
- */
 class DelFileAction extends AbstractAction {
-	private LocalPanel localPanel; // ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ¶ÔÏó
+	private LocalPanel localPanel;
 
-	/**
-	 * ¶¯×÷´¦ÀíÆ÷µÄ¹¹Ôì·½·¨
-	 * 
-	 * @param localPanel
-	 *            ±¾µØ×ÊÔ´¹ÜÀíÃæ°å
-	 * @param name
-	 *            ¶¯×÷Ãû³Æ
-	 * @param icon
-	 *            ¶¯×÷µÄÍ¼±ê
-	 */
 	public DelFileAction(LocalPanel localPanel, String name, Icon icon) {
-		super(name, icon); // µ÷ÓÃ¸¸ÀàµÄ¹¹Ôì·½·¨
-		this.localPanel = localPanel; // ¸³Öµ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
+		super(name, icon);
+		this.localPanel = localPanel;
 	}
 
-	/**
-	 * ´¦Àí¶¯×÷ÊÂ¼şµÄ·½·¨
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	public void actionPerformed(ActionEvent e) {
-		// »ñÈ¡±í¸ñÑ¡ÔñµÄËùÓĞĞĞ
 		final int[] selRows = this.localPanel.localDiskTable.getSelectedRows();
-		if (selRows.length < 1) // Èç¹ûÃ»ÓĞÑ¡Ôñ±í¸ñÄÚÈİ
-			return; // ½áÊø¸Ã·½·¨
+		if (selRows.length < 1)
+			return;
 		int confirmDialog = JOptionPane.showConfirmDialog(localPanel,
-				"È·¶¨ÒªÖ´ĞĞÉ¾³ıÂğ£¿"); // ÓÃ»§È·ÈÏÊÇ·ñÉ¾³ı
-		if (confirmDialog == JOptionPane.YES_OPTION) { // Èç¹ûÓÃÓÚÍ¬ÒâÉ¾³ı
-			Runnable runnable = new Runnable() { // ´´½¨Ïß³Ì
-				/**
-				 * É¾³ıÎÄ¼şµÄµİ¹é·½·¨
-				 * 
-				 * @param file
-				 *            ÒªÉ¾³ıµÄÎÄ¼ş¶ÔÏó
-				 */
+				"ç¡®å®šè¦åˆ é™¤å—ï¼Ÿ");
+		if (confirmDialog == JOptionPane.YES_OPTION) { 
+			Runnable runnable = new Runnable() {
 				private void delFile(File file) {
 					try {
-						if (file.isFile()) { // Èç¹ûÉ¾³ıµÄÊÇÎÄ¼ş
-							boolean delete = file.delete(); // µ÷ÓÃÉ¾¸ÃÎÄ¼şµÄ·½·¨
+						if (file.isFile()) {
+							boolean delete = file.delete();
 							if (!delete) {
 								JOptionPane.showMessageDialog(localPanel, file
 										.getAbsoluteFile()
-										+ "ÎÄ¼şÎŞ·¨É¾³ı¡£", "É¾³ıÎÄ¼ş",
+										+ "æ–‡ä»¶æ— æ³•åˆ é™¤", "åˆ é™¤æ–‡ä»¶",
 										JOptionPane.ERROR_MESSAGE);
 								return;
 							}
-						} else if (file.isDirectory()) { // Èç¹ûÉ¾³ıµÄÊÇÎÄ¼ş¼Ğ
-							File[] listFiles = file.listFiles();// »ñÈ¡¸ÃÎÄ¼ş¼ĞµÄÎÄ¼şÁĞ±í
+						} else if (file.isDirectory()) {
+							File[] listFiles = file.listFiles();
 							if (listFiles.length > 0) {
 								for (File subFile : listFiles) {
-									delFile(subFile); // µ÷ÓÃµİ¹é·½·¨É¾³ı¸ÃÁĞ±íµÄËùÓĞÎÄ¼ş»òÎÄ¼ş¼Ğ
+									delFile(subFile);
 								}
 							}
-							boolean delete = file.delete();// ×îºóÉ¾³ı¸ÃÎÄ¼ş¼Ğ
-							if (!delete) { // Èç¹û³É¹¦É¾³ı
+							boolean delete = file.delete();
+							if (!delete) { 
 								JOptionPane.showMessageDialog(localPanel, file
 										.getAbsoluteFile()
-										+ "ÎÄ¼ş¼ĞÎŞ·¨É¾³ı¡£", "É¾³ıÎÄ¼ş",
+										+ "æ–‡ä»¶å¤¹æ— æ³•åˆ é™¤", "åˆ é™¤æ–‡ä»¶",
 										JOptionPane.ERROR_MESSAGE);
-								return; // ·µ»Ø·½·¨µÄµ÷ÓÃ´¦
+								return;
 							}
 						}
 					} catch (Exception ex) {
@@ -85,34 +60,25 @@ class DelFileAction extends AbstractAction {
 					}
 				}
 
-				/**
-				 * Ïß³ÌµÄÖ÷Ìå·½·¨
-				 * 
-				 * @see java.lang.Runnable#run()
-				 */
 				public void run() {
 					File parent = null;
-					// ±éÀú±í¸ñµÄÑ¡ÔñÄÚÈİ
 					for (int i = 0; i < selRows.length; i++) {
-						// »ñÈ¡Ã¿¸öÑ¡ÔñĞĞµÄµÚÒ»ÁĞµ¥ÔªÄÚÈİ
 						Object value = DelFileAction.this.localPanel.localDiskTable
 								.getValueAt(selRows[i], 0);
-						// Èç¹û¸ÃÄÚÈİ²»ÊÇDiskFileÀàµÄÊµÀı¶ÔÏó
 						if (!(value instanceof DiskFile))
-							continue; // ½áÊø±¾´ÎÑ­»·
+							continue;
 						DiskFile file = (DiskFile) value;
 						if (parent == null)
-							parent = file.getParentFile(); // »ñÈ¡Ñ¡ÔñÎÄ¼şµÄÉÏ¼¶ÎÄ¼ş¼Ğ
+							parent = file.getParentFile();
 						if (file != null) {
-							delFile(file); // µ÷ÓÃµİ¹é·½·¨É¾³ıÑ¡ÔñÄÚÈİ
+							delFile(file);
 						}
 					}
-					// µ÷ÓÃrefreshFolder·½·¨Ë¢ĞÂµ±Ç°ÎÄ¼ş¼Ğ
 					DelFileAction.this.localPanel.refreshFolder(parent);
-					JOptionPane.showMessageDialog(localPanel, "É¾³ı³É¹¦¡£");
+					JOptionPane.showMessageDialog(localPanel, "åˆ é™¤æˆåŠŸ");
 				}
 			};
-			new Thread(runnable).start(); // ´´½¨²¢Æô¶¯Õâ¸öÏß³Ì
+			new Thread(runnable).start();
 		}
 	}
 }

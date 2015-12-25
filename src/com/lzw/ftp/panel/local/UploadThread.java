@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.lzw.ftp.panel.local;
 
 import java.io.File;
@@ -10,7 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Queue;
 
-import com.lzw.ftp.extClass.FtpClient;
+import com.lzw.ftp.extClass.MyFTPClient;
 import com.lzw.ftp.extClass.FtpFile;
 import com.lzw.ftp.extClass.ProgressArg;
 import com.lzw.ftp.panel.ftp.FtpPanel;
@@ -21,13 +18,13 @@ class UploadThread extends Thread {
 	String path = "";
 	String selPath;
 	private boolean conRun = true;
-	private FtpClient ftpClient;
+	private MyFTPClient ftpClient;
 	private Object[] queueValues;
 
 	public UploadThread(LocalPanel localPanel, String server, int port,
 			String userStr, String passStr) {
 		try {
-			ftpClient = new FtpClient(server, port);
+			ftpClient = new MyFTPClient(server, port);
 			ftpClient.login(userStr, passStr);
 			ftpClient.binary();
 			path = ftpClient.pwd();

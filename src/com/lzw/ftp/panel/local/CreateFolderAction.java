@@ -7,69 +7,46 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-/**
- * ´´½¨ÎÄ¼ş¼Ğ°´Å¥µÄ¶¯×÷´¦ÀíÆ÷
- */
 class CreateFolderAction extends AbstractAction {
-	private LocalPanel localPanel; // ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
+	private LocalPanel localPanel;
 
-	/**
-	 * ¹¹Ôì·½·¨
-	 * 
-	 * @param localPanel
-	 *            ±¾µØ×ÊÔ´Ãæ°å
-	 * @param name
-	 *            ¶¯×÷µÄÃû³Æ
-	 * @param icon
-	 *            ¶¯×÷µÄÍ¼±ê
-	 */
 	public CreateFolderAction(LocalPanel localPanel, String name, Icon icon) {
-		super(name, icon); // µ÷ÓÃ¸¸Àà¹¹Ôì·½·¨
-		this.localPanel = localPanel; // ¸³Öµ±¾µØ×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
+		super(name, icon); 
+		this.localPanel = localPanel;
 	}
 
-	/**
-	 * ´¦Àí¶¯×÷ÊÂ¼şµÄ·½·¨
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// Ê¹ÓÃÊäÈë¶Ô»°¿ò½ÓÊÕÓÃ»§ÊäÈëµÄÎÄ¼ş¼ĞÃû³Æ
-		String folderName = JOptionPane.showInputDialog("ÇëÊäÈëÎÄ¼ş¼ĞÃû³Æ£º");
+		String folderName = JOptionPane.showInputDialog("è¯·è¾“å…¥æ–‡ä»¶å¤¹åç§°ï¼š");
 		if (folderName == null)
 			return;
 		File curFolder = null;
-		// »ñÈ¡±¾µØ×ÊÔ´±í¸ñµÄµ±Ç°Ñ¡ÔñĞĞºÅ
 		int selRow = localPanel.localDiskTable.getSelectedRow();
 		if (selRow < 0) {
-			// ´´½¨µ±Ç°ÎÄ¼ş¼Ğ¶ÔÏó
 			curFolder = new File(localPanel.localSelFilePathLabel.getText());
 		} else {
-			// »ñÈ¡±í¸ñÑ¡ÔñĞĞµÄµÚÒ»¸öµ¥ÔªÖµ
 			Object value = localPanel.localDiskTable.getValueAt(selRow, 0);
-			if (value instanceof File) { // Èç¹ûµ¥ÔªÖµÊÇÎÄ¼ş£¬Ôò»ñÈ¡ÎÄ¼şµÄÉÏ¼¶ÎÄ¼ş¼Ğ
+			if (value instanceof File) {
 				curFolder = (File) value;
 				if (curFolder.getParentFile() != null)
 					curFolder = curFolder.getParentFile();
 			} else
-				// ·ñÔò¸ù¾İ½çÃæµÄÂ·¾¶±êÇ©´´½¨µ±Ç°ÎÄ¼ş¼Ğ¶ÔÏó
 				curFolder = new File(localPanel.localSelFilePathLabel.getText());
 		}
-		// ´´½¨µ±Ç°ÎÄ¼ş¼ĞÏÂµÄĞÂÎÄ¼ş¼Ğ¶ÔÏó
+
 		File tempFile = new File(curFolder, folderName);
-		if (tempFile.exists()) {// Èç¹û´æÔÚÏàÍ¬ÎÄ¼ş»òÎÄ¼ş¼Ğ
+		if (tempFile.exists()) {
 			JOptionPane.showMessageDialog(localPanel, folderName
-					+ "´´½¨Ê§°Ü£¬ÒÑ¾­´æÔÚ´ËÃû³ÆµÄÎÄ¼ş¼Ğ»òÎÄ¼ş¡£", "´´½¨ÎÄ¼ş¼Ğ",
-					JOptionPane.ERROR_MESSAGE);// ÌáÊ¾ÓÃ»§Ãû³ÆÒÑ´æÔÚ
-			return; // ½áÊø±¾·½·¨
+					+ "åˆ›å»ºå¤±è´¥ï¼Œå·²ç»å­˜åœ¨æ­¤åç§°çš„æ–‡ä»¶å¤¹æˆ–æ–‡ä»¶", "åˆ›å»ºæ–‡ä»¶å¤¹",
+					JOptionPane.ERROR_MESSAGE);
+			return;
 		}
-		if (tempFile.mkdir()) // ´´½¨ÎÄ¼ş¼Ğ
-			JOptionPane.showMessageDialog(localPanel, folderName + "ÎÄ¼ş¼Ğ£¬´´½¨³É¹¦¡£",
-					"´´½¨ÎÄ¼ş¼Ğ", JOptionPane.INFORMATION_MESSAGE);
+		if (tempFile.mkdir())
+			JOptionPane.showMessageDialog(localPanel, folderName + "æ–‡ä»¶å¤¹ï¼Œåˆ›å»ºæˆåŠŸ",
+					"åˆ›å»ºæ–‡ä»¶å¤¹", JOptionPane.INFORMATION_MESSAGE);
 		else
-			JOptionPane.showMessageDialog(localPanel, folderName + "ÎÄ¼ş¼ĞÎŞ·¨±»´´½¨¡£",
-					"´´½¨ÎÄ¼ş¼Ğ", JOptionPane.ERROR_MESSAGE);
-		this.localPanel.refreshFolder(curFolder);// Ë¢ĞÂÎÄ¼ş¼Ğ
+			JOptionPane.showMessageDialog(localPanel, folderName + "æ–‡ä»¶å¤¹æ— æ³•åˆ›å»º",
+					"åˆ›å»ºæ–‡ä»¶å¤¹", JOptionPane.ERROR_MESSAGE);
+		this.localPanel.refreshFolder(curFolder);
 	}
 }

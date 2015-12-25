@@ -31,8 +31,8 @@ public class FTPTableCellRanderer extends DefaultTableCellRenderer {
 				setText(file.toString());
 			} else {
 				if (file instanceof File) { 
-					Icon icon = view.getSystemIcon((File) file);// ��ȡ�ļ���ͼ��
-					setIcon(icon); // ���ñ��Ԫͼ��
+					Icon icon = view.getSystemIcon((File) file);
+					setIcon(icon);
 				} else if (file instanceof FtpFile) {
 					FtpFile ftpfile = (FtpFile) file;
 					try {

@@ -7,56 +7,32 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-/**
- * ´´½¨ÎÄ¼ş¼Ğ°´Å¥µÄ¶¯×÷´¦ÀíÆ÷
- */
 class CreateFolderAction extends AbstractAction {
 	private FtpPanel ftpPanel;
 
-	/**
-	 * ¹¹Ôì·½·¨
-	 * 
-	 * @param ftpPanel
-	 *            - FTP×ÊÔ´¹ÜÀíÃæ°å
-	 * @param name
-	 *            - ¶¯×÷Ãû³Æ
-	 * @param icon
-	 *            - ¶¯×÷Í¼±ê
-	 */
 	public CreateFolderAction(FtpPanel ftpPanel, String name, Icon icon) {
-		super(name, icon); // µ÷ÓÃ¸¸Àà¹¹Ôì·½·¨
-		this.ftpPanel = ftpPanel; // ¸³ÖµFTP×ÊÔ´¹ÜÀíÃæ°åµÄÒıÓÃ
+		super(name, icon);
+		this.ftpPanel = ftpPanel;
 	}
 
-	/**
-	 * ´´½¨ÎÄ¼ş¼ĞµÄÊÂ¼ş´¦Àí·½·¨
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// ½ÓÊÕÓÃ»§ÊäÈëµÄĞÂ½¨ÎÄ¼ş¼ĞµÄÃû³Æ
-		String folderName = JOptionPane.showInputDialog("ÇëÊäÈëÎÄ¼ş¼ĞÃû³Æ£º");
+		String folderName = JOptionPane.showInputDialog("è¯·è¾“å…¥æ–‡ä»¶å¤¹åç§°ï¼š");
 		if (folderName == null)
 			return;
 		int read = -1;
 		try {
-			// ·¢ËÍ´´½¨ÎÄ¼ş¼ĞµÄÃüÁî
 			ftpPanel.ftpClient.sendServer("MKD " + folderName + "\r\n");
-			// ¶ÁÈ¡FTP·şÎñÆ÷µÄÃüÁî·µ»ØÂë
 			read = ftpPanel.ftpClient.readServerResponse();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		if (read == 257) // Èç¹û·µ»ØÂëµÈÓÚ257£¨Â·¾¶Ãû½¨Á¢Íê³É£©
-			// ÌáÊ¾ÎÄ¼ş¼Ğ´´½¨³É¹¦
-			JOptionPane.showMessageDialog(ftpPanel, folderName + "ÎÄ¼ş¼Ğ£¬´´½¨³É¹¦¡£",
-					"´´½¨ÎÄ¼ş¼Ğ", JOptionPane.INFORMATION_MESSAGE);
+		if (read == 257)
+			JOptionPane.showMessageDialog(ftpPanel, folderName + "æ–‡ä»¶å¤¹åˆ›å»ºæˆåŠŸ",
+					"åˆ›å»ºæ–‡ä»¶å¤¹", JOptionPane.INFORMATION_MESSAGE);
 		else
-			// ·ñÔò
-			// ÌáÊ¾ÓÃ»§¸ÃÎÄ¼ş¼ĞÎŞ·¨´´½¨
-			JOptionPane.showMessageDialog(ftpPanel, folderName + "ÎÄ¼ş¼ĞÎŞ·¨±»´´½¨¡£",
-					"´´½¨ÎÄ¼ş¼Ğ", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(ftpPanel, folderName + "æ–‡ä»¶å¤¹æ— æ³•åˆ›å»º",
+					"åˆ›å»ºæ–‡ä»¶å¤¹", JOptionPane.ERROR_MESSAGE);
 		this.ftpPanel.refreshCurrentFolder();
 	}
 }

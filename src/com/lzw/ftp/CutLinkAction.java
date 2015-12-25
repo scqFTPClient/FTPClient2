@@ -24,16 +24,14 @@ class CutLinkAction extends AbstractAction {
 			frame.getFtpPanel().getQueue().clear();
 			frame.getFtpPanel().clearTable();
 			frame.getLocalPanel().getQueue().clear();
-			// ���FTP���Ӷ�����ڣ������Ѿ�����FTP������
 			if (frame.ftpClient != null && frame.ftpClient.serverIsOpen()) {
-				frame.ftpClient.sendServer("quit\r\n"); // ���ͶϿ����ӵ�FTPЭ�������
-				frame.ftpClient.readServerResponse(); // ��ȡ���ر���
+				frame.ftpClient.sendServer("quit\r\n"); 
+				frame.ftpClient.readServerResponse();
 				frame.ftpClient = null;
 			}
-			// �����ϴ���ť������
+
 			frame.localPanel.getActionMap().get("uploadAction").setEnabled(
 					false);
-			// �������ذ�ť������
 			frame.ftpPanel.getActionMap().get("downAction").setEnabled(false);
 			setEnabled(false);
 		} catch (IOException e1) {

@@ -3,6 +3,7 @@ package com.lzw.ftp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +22,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 
-import com.lzw.ftp.extClass.FtpClient;
+import com.lzw.ftp.extClass.MyFTPClient;
 import com.lzw.ftp.extClass.SiteInfoBean;
 import com.lzw.ftp.panel.ftp.FtpPanel;
 import com.lzw.ftp.panel.local.LocalPanel;
@@ -29,7 +30,7 @@ import com.lzw.ftp.panel.manager.FtpSiteDialog;
 import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 
 public class FTP_Client_Frame extends javax.swing.JFrame {
-	FtpClient ftpClient;
+	MyFTPClient ftpClient;
 	private JPasswordField PassField;
 	private JButton cutLinkButton;
 	FtpPanel ftpPanel;
@@ -374,7 +375,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 	
 	
 	//连接按钮触发
-	private void linkButtonActionPerformed(java.awt.event.ActionEvent evt) {
+	private void linkButtonActionPerformed(java.awt.event.ActionEvent evt){
 		try {
 			String server = serverTextField.getText(); 
 			if (server == null) {
@@ -390,7 +391,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 			String passStr = PassField.getText();
 			passStr = passStr == null ? "" : passStr.trim();
 			cutLinkButton.doClick();
-			ftpClient = new FtpClient();
+			ftpClient = new MyFTPClient();
 			ftpClient.openServer(server.trim(), port); 
 			ftpClient.login(userStr, passStr);
 			ftpClient.binary(); 
@@ -444,7 +445,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		return ftpPanel;
 	}
 
-	public FtpClient getFtpClient() {
+	public MyFTPClient getFtpClient() {
 		return ftpClient;
 	}
 
