@@ -46,6 +46,7 @@ public class FTPTableCellRanderer extends DefaultTableCellRenderer {
 				setText(file.toString());
 			}
 		} else { 
+			System.out.println(value.toString());
 			setText(value.toString());
 		}
 	}

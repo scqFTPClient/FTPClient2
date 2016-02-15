@@ -119,13 +119,13 @@ public class LocalPanel extends javax.swing.JPanel {
 		toolBar.add(refreshButton);
 		toolBar.add(jSeparator1);
 
-		localDiskComboBox.setModel(new DefaultComboBoxModel(File.listRoots()));
-		localDiskComboBox.addItemListener(new java.awt.event.ItemListener() {
-			public void itemStateChanged(java.awt.event.ItemEvent evt) {
-				localDiskComboBoxItemStateChanged(evt);
-			}
-		});
-		toolBar.add(localDiskComboBox);
+//		localDiskComboBox.setModel(new DefaultComboBoxModel(File.listRoots()));
+//		localDiskComboBox.addItemListener(new java.awt.event.ItemListener() {
+//			public void itemStateChanged(java.awt.event.ItemEvent evt) {
+//				localDiskComboBoxItemStateChanged(evt);
+//			}
+//		});
+//		toolBar.add(localDiskComboBox);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -190,7 +190,7 @@ public class LocalPanel extends javax.swing.JPanel {
 	 * 刷新指定文件夹的方法
 	 */
 	void refreshFolder(File file) {
-		listLocalFiles(file);
+		this.listLocalFiles(file);
 	}
 
 	/**

@@ -66,7 +66,7 @@ class UploadThread extends Thread {
 			path = ftpFile.getAbsolutePath();
 			System.out.println(path);
 			if (file.isFile()) {
-				String remoteFile = path + "/" + file.getName();
+				String remoteFile = path + file.getName();
 				System.out.println("remoteFile:" + remoteFile);
 				double fileLength = file.length() / Math.pow(1024, 2);
 				ProgressArg progressArg = new ProgressArg(

@@ -29,9 +29,9 @@ class RennameAction extends AbstractAction {
 		if (fileName == null)
 			return;
 
-		File renFile = new File(file.getParentFile(), fileName);
-		System.out.println(renFile);
-		boolean isRename = file.renameTo(renFile);
+		File renamedFile = new File(file.getParentFile(), fileName);
+		System.out.println(renamedFile);
+		boolean isRename = file.renameTo(renamedFile);
 
 		this.localPanel.refreshFolder(file.getParentFile());
 		if (isRename) {
