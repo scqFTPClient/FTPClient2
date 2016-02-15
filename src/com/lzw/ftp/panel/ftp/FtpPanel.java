@@ -21,6 +21,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.table.TableStringConverter;
 
+import org.apache.commons.net.ftp.FTPFile;
+
 import sun.net.TelnetInputStream;
 
 import com.lzw.ftp.FTP_Client_Frame;
@@ -155,27 +157,35 @@ public class FtpPanel extends javax.swing.JPanel {
 		add(ftpSelFilePathLabel, gridBagConstraints);
 	}
 
-	private void ftpDiskTableMouseClicked(java.awt.event.MouseEvent evt) {
+	private void ftpDiskTableMouseClicked(java.awt.event.MouseEvent evt){	
 		int selectedRow = ftpDiskTable.getSelectedRow();
-		Object value = ftpDiskTable.getValueAt(selectedRow, 0);
-		if (value instanceof FtpFile) {
-			FtpFile selFile = (FtpFile) value;
-			ftpSelFilePathLabel.setText(selFile.getAbsolutePath());
-			if (evt.getClickCount() >= 2) {
-				if (selFile.isDirectory()) {
-					try {
-						ftpClient.cd(selFile.getAbsolutePath());
-						listFtpFiles(ftpClient.list());
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
+		Object name = ftpDiskTable.getValueAt(selectedRow, 0);
+		Object type = ftpDiskTable.getValueAt(selectedRow, 1);
+		//  如果鼠标双击并且是目录
+		if(type.equals("<DIR>")) {
+			if(evt.getClickCount() >= 2) {
+				try {
+					ftpClient.cd(ftpClient.pwd() + "/" + name);
+					listFtpFiles(ftpClient.list("."));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
 	}
 
 	//列出ftp文件
-	public synchronized void listFtpFiles(final TelnetInputStream list) {
+	public synchronized void listFtpFiles(final FTPFile[] ftpFiles) {
+		
+		
+		
+		for(int i = 0;i < ftpFiles.length; i++) {
+			System.out.println(ftpFiles[i] + "----------" + "\n");
+		}
+		
+		
+		
 		
 		//列出文件列表 并且显示到面板上
 		final DefaultTableModel model = (DefaultTableModel) ftpDiskTable
@@ -186,25 +196,29 @@ public class FtpPanel extends javax.swing.JPanel {
 			public synchronized void run() {
 				ftpDiskTable.clearSelection();
 				
-				String pwd = getPwd();
-				model.addRow(new Object[] { new FtpFile(".", pwd, true),
-						"", "" }); 
-				model.addRow(new Object[] { new FtpFile("..", pwd, true),
-						"", "" });
-				FtpFile ftpFile = new FtpFile();
-
-				String dateStr = "a";
-				String sizeOrDir = "a";
-				String fileName = "a";
-
-				ftpFile.setLastDate(dateStr);
-				ftpFile.setFileSize(sizeOrDir);
-				ftpFile.setName(fileName);
-				ftpFile.setPath(pwd);
-
-				model.addRow(new Object[] { ftpFile, ftpFile.getSize(),
-						dateStr });
+				String pwd = ftpClient.pwd();
+				model.addRow(new Object[] { ".", "<DIR>", "" }); // 创建.选项
+				model.addRow(new Object[] { "..", "<DIR>", "" }); // 创建..选项
 				
+				for( int i = 0; i < ftpFiles.length; i++) {
+					FTPFile file = ftpFiles[i];
+					String fileName =  file.getName();
+					String time = file.getTimestamp().getTime().toString();
+					String length = file.getSize() + "B "; // 获取文件大小
+					if (file.getSize() > 1000 * 1000 * 1000) { // 计算文件G单位
+						length = file.getSize() / 1000000000 + "G ";
+					}
+					if (file.getSize()> 1000 * 1000) { // 计算文件M单位
+						length = file.getSize() / 1000000 + "M ";
+					}
+					if (file.getSize() > 1000) {
+						length = file.getSize() / 1000 + "K "; // 计算文件K单位
+					}
+					if (file.isDirectory()) { // 显示文件夹标志
+						length = "<DIR>";
+					}
+					model.addRow(new Object[] { fileName, length, time });
+				}			
 				
 			}
 		};
@@ -238,6 +252,12 @@ public class FtpPanel extends javax.swing.JPanel {
 	//刷新当前目录
 	public void refreshCurrentFolder() {
 		//TODO
+		try {
+			this.listFtpFiles(ftpClient.list("."));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void startDownThread() {
@@ -252,16 +272,6 @@ public class FtpPanel extends javax.swing.JPanel {
 			thread.stopThread();
 			ftpClient = null;
 		}
-	}
-
-	public String getPwd() {
-		String pwd = null;
-		try {
-			pwd = ftpClient.pwd();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return pwd;
 	}
 
 	public Queue<Object[]> getQueue() {

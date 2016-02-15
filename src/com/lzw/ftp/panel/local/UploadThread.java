@@ -74,7 +74,7 @@ class UploadThread extends Thread {
 				String size = String.format("%.4f MB", fileLength);
 				Object[] row = new Object[] { file.getAbsoluteFile(), size,
 						remoteFile, ftpClient.getServer(), progressArg };
-				OutputStream put = ftpClient.put(remoteFile); 
+				OutputStream put = ftpClient.put(file.getName(), path);
 				FileInputStream fis = null;
 				try {
 					fis = new FileInputStream(file); 

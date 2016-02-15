@@ -1,8 +1,11 @@
 package com.lzw.ftp.extClass;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import sun.net.TelnetInputStream;
 import sun.net.TelnetOutputStream;
@@ -62,8 +65,10 @@ public class MyFTPClient{
 	}
 
 	//列出目录中文件
-	public synchronized TelnetInputStream list() throws IOException {
-		return new TelnetInputStream(null, false);
+	public synchronized FTPFile[] list(String pathname) throws IOException {
+		FTPFile[] files = ftpClient.listFiles(pathname);
+		
+		return files;
 	}
 
 	public synchronized void noop() throws IOException {
@@ -71,14 +76,19 @@ public class MyFTPClient{
 	}
 	
 	//上传文件
-	public synchronized TelnetOutputStream put(String arg0) throws IOException {
-		return new TelnetOutputStream(null, false);
+	public synchronized OutputStream put(String fileName, String remotePath) throws IOException {
+		return ftpClient.storeFileStream(remotePath);
 	}
 
 	//现在的目录
-	public synchronized String pwd() throws IOException {
-		String pwd = ftpClient.printWorkingDirectory();
-		pwd = new String(pwd.getBytes("iso-8859-1"), "GBK");
+	public synchronized String pwd(){
+		String pwd = "";
+		try {
+			pwd = ftpClient.printWorkingDirectory();
+			pwd = new String(pwd.getBytes("iso-8859-1"), "GBK");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return pwd;
 	}
 
@@ -113,4 +123,5 @@ public class MyFTPClient{
 	public String getServer() {
 		return server;
 	}
+
 }
