@@ -142,7 +142,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		ipLabel.setText("主机IP地址：");
 		loginPanel.add(ipLabel);
 
-		serverTextField.setText("192.168.1.128");
+		serverTextField.setText("192.168.99.100");
 		serverTextField.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyPressed(java.awt.event.KeyEvent evt) {
 				LinkFTPKeyPressed(evt);
@@ -153,7 +153,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		usernameLabel.setText("用户名:");
 		loginPanel.add(usernameLabel);
 
-		userTextField.setText("mr");
+		userTextField.setText("hello");
 		userTextField.setMaximumSize(new java.awt.Dimension(200, 2147483647));
 		userTextField.setPreferredSize(new java.awt.Dimension(100, 21));
 		userTextField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -166,7 +166,7 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		passwordLabel.setText("密码：");
 		loginPanel.add(passwordLabel);
 
-		PassField.setText("mrsoft");
+		PassField.setText("a");
 		PassField.setMaximumSize(new java.awt.Dimension(200, 2147483647));
 		PassField.setPreferredSize(new java.awt.Dimension(100, 21));
 		PassField.addKeyListener(new java.awt.event.KeyAdapter() {

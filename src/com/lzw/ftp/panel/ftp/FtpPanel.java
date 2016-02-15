@@ -174,6 +174,7 @@ public class FtpPanel extends javax.swing.JPanel {
 		}
 	}
 
+	//列出ftp文件
 	public synchronized void listFtpFiles(final TelnetInputStream list) {
 
 		final DefaultTableModel model = (DefaultTableModel) ftpDiskTable
@@ -244,6 +245,7 @@ public class FtpPanel extends javax.swing.JPanel {
 		startDownThread();
 	}
 
+	//刷新当前目录
 	public void refreshCurrentFolder() {
 		try {
 			TelnetInputStream list = ftpClient.list();

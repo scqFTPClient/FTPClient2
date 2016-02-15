@@ -36,7 +36,10 @@ public class MyFTPClient{
 	
 	//登录服务器
 	public synchronized void login(String username, String password) throws IOException {
-		ftpClient.login(username, password);
+		boolean isSuccess = ftpClient.login(username, password);
+		if(isSuccess) {
+			System.out.println("登录成功！");
+		}
 	}
 	
 	public synchronized void binary() throws IOException {

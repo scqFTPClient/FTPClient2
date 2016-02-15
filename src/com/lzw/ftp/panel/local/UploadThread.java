@@ -25,7 +25,9 @@ class UploadThread extends Thread {
 			String userStr, String passStr) {
 		try {
 			ftpClient = new MyFTPClient(server, port);
+			ftpClient.openServer(server, port);
 			ftpClient.login(userStr, passStr);
+			System.out.println("a");
 			ftpClient.binary();
 			path = ftpClient.pwd();
 		} catch (IOException e) {

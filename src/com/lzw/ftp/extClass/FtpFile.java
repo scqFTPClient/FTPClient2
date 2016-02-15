@@ -1,6 +1,8 @@
 package com.lzw.ftp.extClass;
 
-public class FtpFile implements FileInterface {
+import org.apache.commons.net.ftp.FTPFile;
+
+public class FtpFile extends FTPFile {
 	private String name = ""; 
 	private String path = ""; 
 	protected boolean directory;
@@ -12,7 +14,7 @@ public class FtpFile implements FileInterface {
 	private final int MB = (int) Math.pow(1024, 2);
 	private final int KB = 1024;
 
-	public FtpFile() {
+	public FtpFile(){
 	}
 
 	public FtpFile(String name, String path, boolean directory) {
@@ -21,11 +23,11 @@ public class FtpFile implements FileInterface {
 		this.directory = directory;
 	}
 
-	public String getSize() {
-		return size;
+	public String getFileSize() {
+		return super.getSize() + "";
 	}
 
-	public void setSize(String nsize) {
+	public void setFileSize(String nsize) {
 		if (nsize.indexOf("DIR") != -1) {
 			this.size = "<DIR>";
 			directory = true; 
