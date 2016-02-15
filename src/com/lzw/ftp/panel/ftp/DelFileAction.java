@@ -48,7 +48,7 @@ class DelFileAction extends AbstractAction {
 								FtpFile ftpFile = new FtpFile();
 								ftpFile.setName(name);
 								ftpFile.setPath(file.getAbsolutePath());
-								ftpFile.setSize(size);
+								ftpFile.setFileSize(size);
 								delFile(ftpFile);
 							}
 							list.close();

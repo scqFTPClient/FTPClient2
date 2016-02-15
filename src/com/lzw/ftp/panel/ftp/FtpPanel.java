@@ -176,7 +176,8 @@ public class FtpPanel extends javax.swing.JPanel {
 
 	//列出ftp文件
 	public synchronized void listFtpFiles(final TelnetInputStream list) {
-
+		
+		//列出文件列表 并且显示到面板上
 		final DefaultTableModel model = (DefaultTableModel) ftpDiskTable
 				.getModel();
 		model.setRowCount(0);
@@ -184,38 +185,27 @@ public class FtpPanel extends javax.swing.JPanel {
 		Runnable runnable = new Runnable() {
 			public synchronized void run() {
 				ftpDiskTable.clearSelection();
-				try {
-					String pwd = getPwd();
-					model.addRow(new Object[] { new FtpFile(".", pwd, true),
-							"", "" }); 
-					model.addRow(new Object[] { new FtpFile("..", pwd, true),
-							"", "" });
-					BufferedReader br = new BufferedReader(
-							new InputStreamReader(list));
-					String data = null;
-			
-					while ((data = br.readLine()) != null) {
-		
-						FtpFile ftpFile = new FtpFile();
+				
+				String pwd = getPwd();
+				model.addRow(new Object[] { new FtpFile(".", pwd, true),
+						"", "" }); 
+				model.addRow(new Object[] { new FtpFile("..", pwd, true),
+						"", "" });
+				FtpFile ftpFile = new FtpFile();
 
-						String dateStr = data.substring(0, 17).trim();
-						String sizeOrDir = data.substring(18, 39).trim();
-						String fileName = data.substring(39, data.length())
-								.trim();
+				String dateStr = "a";
+				String sizeOrDir = "a";
+				String fileName = "a";
 
-						ftpFile.setLastDate(dateStr);
-						ftpFile.setSize(sizeOrDir);
-						ftpFile.setName(fileName);
-						ftpFile.setPath(pwd);
-	
-						model.addRow(new Object[] { ftpFile, ftpFile.getSize(),
-								dateStr });
-					}
-					br.close(); 
-				} catch (IOException ex) {
-					Logger.getLogger(FTP_Client_Frame.class.getName()).log(
-							Level.SEVERE, null, ex);
-				}
+				ftpFile.setLastDate(dateStr);
+				ftpFile.setFileSize(sizeOrDir);
+				ftpFile.setName(fileName);
+				ftpFile.setPath(pwd);
+
+				model.addRow(new Object[] { ftpFile, ftpFile.getSize(),
+						dateStr });
+				
+				
 			}
 		};
 		if (SwingUtilities.isEventDispatchThread()) 
@@ -247,12 +237,7 @@ public class FtpPanel extends javax.swing.JPanel {
 
 	//刷新当前目录
 	public void refreshCurrentFolder() {
-		try {
-			TelnetInputStream list = ftpClient.list();
-			listFtpFiles(list);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//TODO
 	}
 
 	private void startDownThread() {

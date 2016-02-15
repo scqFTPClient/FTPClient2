@@ -15,9 +15,11 @@ public class FtpFile extends FTPFile {
 	private final int KB = 1024;
 
 	public FtpFile(){
+		super();
 	}
 
 	public FtpFile(String name, String path, boolean directory) {
+		super();
 		this.name = name; 
 		this.path = path;
 		this.directory = directory;
@@ -49,20 +51,13 @@ public class FtpFile extends FTPFile {
 		}
 	}
 
+	//最后修改日期timestamp
 	public String getLastDate() {
 		return lastDate;
 	}
 
 	public void setLastDate(String lastDate) {
 		this.lastDate = lastDate;
-	}
-
-	public boolean isFile() {
-		return file;
-	}
-
-	public boolean isDirectory() {
-		return directory;
 	}
 
 	public String getAbsolutePath() {
@@ -80,20 +75,7 @@ public class FtpFile extends FTPFile {
 		this.path = path;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
-
 	public long getLongSize() {
-		return longSize;
+		return super.getSize();
 	}
 }

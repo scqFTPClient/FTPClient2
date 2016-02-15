@@ -167,6 +167,9 @@ public class LocalPanel extends javax.swing.JPanel {
 		gridBagConstraints.gridy = 3;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		add(localSelFilePathLabel, gridBagConstraints);
+		
+		//初始化打开时候，默认显示当前文件夹
+		this.listLocalFiles(new File("."));
 	}
 
 	/**
@@ -227,7 +230,9 @@ public class LocalPanel extends javax.swing.JPanel {
 		if (value instanceof DiskFile) { // 如果该值是DiskFile的实例对象
 			DiskFile selFile = (DiskFile) value;
 			// 设置状态栏的本地文件路径
+			System.out.println(selFile.getAbsolutePath());
 			localSelFilePathLabel.setText(selFile.getAbsolutePath());
+			
 			if (evt.getClickCount() >= 2) { // 如果是双击鼠标
 				if (selFile.isDirectory()) { // 并且选择的是文件夹
 					listLocalFiles(selFile); // 显示该文件夹的内容列表

@@ -96,7 +96,7 @@ public class DownThread extends Thread {
 					FtpFile ftpFile = new FtpFile();
 					ftpFile.setName(name);
 					ftpFile.setPath(file.getAbsolutePath());
-					ftpFile.setSize(size);
+					ftpFile.setFileSize(size);
 					downFile(ftpFile, localFolder);
 				}
 				list.close();
