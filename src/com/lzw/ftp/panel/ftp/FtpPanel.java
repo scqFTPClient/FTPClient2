@@ -27,7 +27,6 @@ import sun.net.TelnetInputStream;
 
 import com.lzw.ftp.FTP_Client_Frame;
 import com.lzw.ftp.extClass.MyFTPClient;
-import com.lzw.ftp.extClass.FtpFile;
 import com.lzw.ftp.panel.FTPTableCellRanderer;
 
 public class FtpPanel extends javax.swing.JPanel {
@@ -178,15 +177,6 @@ public class FtpPanel extends javax.swing.JPanel {
 	//列出ftp文件
 	public synchronized void listFtpFiles(final FTPFile[] ftpFiles) {
 		
-		
-		
-		for(int i = 0;i < ftpFiles.length; i++) {
-			System.out.println(ftpFiles[i] + "----------" + "\n");
-		}
-		
-		
-		
-		
 		//列出文件列表 并且显示到面板上
 		final DefaultTableModel model = (DefaultTableModel) ftpDiskTable
 				.getModel();
@@ -281,5 +271,10 @@ public class FtpPanel extends javax.swing.JPanel {
 	public void clearTable() {
 		FtpTableModel model = (FtpTableModel) ftpDiskTable.getModel();
 		model.setRowCount(0);
+	}
+
+	public String getPwd() {
+		// TODO 获取当前路径
+		return ftpClient.pwd();
 	}
 }

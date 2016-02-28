@@ -6,8 +6,11 @@ import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
-import com.lzw.ftp.extClass.FtpFile;
+import org.apache.commons.net.ftp.FTPFile;
 
+/*
+ * 下载按钮，从远程下载文件到本地
+ */
 class DownAction extends AbstractAction {
 	private final FtpPanel ftpPanel;
 
@@ -23,12 +26,12 @@ class DownAction extends AbstractAction {
 		if (selRows.length < 1)
 			return;
 		for (int i = 0; i < selRows.length; i++) {
-			final FtpFile file = (FtpFile) ftpPanel.ftpDiskTable.getValueAt(
-					selRows[i], 0);
-			if (file != null) {
-				File currentFolder = ftpPanel.frame.getLocalPanel()
-						.getCurrentFolder();
-				ftpPanel.queue.offer(new Object[] { file, currentFolder });
+			final String fileName =  (String) ftpPanel.ftpDiskTable.getValueAt(selRows[i], 0);
+			if (!fileName.equals(".") && !fileName.equals("..")) {
+				String localFolder = ftpPanel.frame.getLocalPanel()
+						.getCurrentFolder().toString();
+				System.out.println(localFolder);
+				ftpPanel.queue.offer(new Object[] { fileName, localFolder });
 			}
 		}
 	}

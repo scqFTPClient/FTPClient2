@@ -1,5 +1,10 @@
 package com.lzw.ftp;
 
+import java.awt.AWTException;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -7,6 +12,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -29,6 +35,8 @@ import com.lzw.ftp.panel.local.LocalPanel;
 import com.lzw.ftp.panel.manager.FtpSiteDialog;
 import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 
+import javafx.scene.image.Image;
+
 public class FTP_Client_Frame extends javax.swing.JFrame {
 	MyFTPClient ftpClient;
 	private JPasswordField PassField;
@@ -43,12 +51,41 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 	private final LinkToAction LINK_TO_ACTION; 
 	private final CutLinkAction CUT_LINK_ACTION; 
 	private JToggleButton shutdownButton;
+	private SystemTray systemTray; //系统面板
 
+	private final ImageIcon icon = new ImageIcon(getClass().getResource("/com/lzw/ftp/res/icon.png")); //设置图标路径
+	
 
 	public FTP_Client_Frame() {
 		LINK_TO_ACTION = new LinkToAction(this, "连接到", null);
 		CUT_LINK_ACTION = new CutLinkAction(this, "断开", null);
 		initComponents();
+		initSystemTray();
+	}
+
+	private void initSystemTray() {
+		//完成系统右下角图标
+		if (SystemTray.isSupported())
+			systemTray = SystemTray.getSystemTray();
+		PopupMenu popupMenu = new PopupMenu("欢迎使用");
+
+		//退出客户端功能
+		MenuItem exitMenuItem = new MenuItem("退出");
+		exitMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});	
+		popupMenu.add(exitMenuItem);
+		
+		TrayIcon trayIcon = new TrayIcon(icon.getImage());
+		trayIcon.setPopupMenu(popupMenu);
+		try {
+			systemTray.add(trayIcon);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initComponents() {
@@ -134,7 +171,13 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		shutdownButton.setToolTipText("关闭");
 		shutdownButton.setFocusable(false);
 		jToolBar1.add(shutdownButton);
-
+		shutdownButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});	
+		
 		loginPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 		loginPanel.setLayout(new javax.swing.BoxLayout(loginPanel,
 				javax.swing.BoxLayout.LINE_AXIS));
@@ -362,12 +405,6 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 		return shutdownButton;
 	}
 
-//	private void formWindowOpened(java.awt.event.WindowEvent evt) {
-//		jSplitPane1.setDividerLocation(0.50);
-//		localPanel.getLocalDiskComboBox().setSelectedIndex(1);
-//		localPanel.getLocalDiskComboBox().setSelectedIndex(0);
-//	}
-
 	private void formComponentResized(java.awt.event.ComponentEvent evt) {
 		jSplitPane1.setDividerLocation(0.50);
 	}
@@ -394,7 +431,6 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 			ftpClient = new MyFTPClient();
 			ftpClient.openServer(server.trim(), port); 
 			ftpClient.login(userStr, passStr);
-			ftpClient.binary(); 
 			if (ftpClient.serverIsOpen()) { 
 				CUT_LINK_ACTION.setEnabled(true);
 			} else {

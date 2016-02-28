@@ -8,6 +8,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+/*
+ * 关于本软件的信息
+ */
 class AboutItemAction implements ActionListener {
 	private final FTP_Client_Frame frame;
 	private JPanel topPane;

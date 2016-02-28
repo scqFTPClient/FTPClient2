@@ -9,10 +9,13 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+
+import org.apache.commons.net.ftp.FTPFile;
+
 import com.lzw.ftp.extClass.MyFTPClient;
-import com.lzw.ftp.extClass.FtpFile;
 import com.lzw.ftp.panel.local.LocalPanel;
 
+//删除远程文件
 class DelFileAction extends AbstractAction {
 	private FtpPanel ftpPanel;
 
@@ -28,52 +31,17 @@ class DelFileAction extends AbstractAction {
 		int confirmDialog = JOptionPane.showConfirmDialog(ftpPanel, "确定要删除吗？");
 		if (confirmDialog == JOptionPane.YES_OPTION) {
 			Runnable runnable = new Runnable() {
-				private void delFile(FtpFile file) {
-					MyFTPClient ftpClient = ftpPanel.ftpClient; 
-					try {
-						if (file.isFile()) {
-							ftpClient.sendServer("DELE " + file.getName()
-									+ "\r\n"); 
-							ftpClient.readServerResponse(); 
-						} else if (file.isDirectory()) { 
-							ftpClient.cd(file.getName());
-							InputStreamReader list = new InputStreamReader(
-									ftpClient.list());
-							BufferedReader br = new BufferedReader(list);
-							String nameStr = null;
-							while ((nameStr = br.readLine()) != null) {
-								Thread.sleep(0, 100);
-								String name = nameStr.substring(39); 
-								String size = nameStr.substring(18, 39);
-								FtpFile ftpFile = new FtpFile();
-								ftpFile.setName(name);
-								ftpFile.setPath(file.getAbsolutePath());
-								ftpFile.setFileSize(size);
-								delFile(ftpFile);
-							}
-							list.close();
-							br.close();
-							ftpClient.cdUp();
-							ftpClient.sendServer("RMD " + file.getName()
-									+ "\r\n");
-							ftpClient.readServerResponse();
-						}
-					} catch (Exception ex) {
-						Logger.getLogger(LocalPanel.class.getName()).log(
-								Level.SEVERE, null, ex);
-					}
+				private void delFile(String pathName) {
+					
 				}
-
+				
 				public void run() {
+					String path = DelFileAction.this.ftpPanel.ftpClient.pwd();
 					for (int i = 0; i < selRows.length; i++) {
-						final FtpFile file = (FtpFile) ftpPanel.ftpDiskTable
-								.getValueAt(selRows[i], 0);
-						if (file != null) {
-							delFile(file);
+						String filename = (String) ftpPanel.ftpDiskTable.getValueAt(selRows[0], 0);
+						if (filename != null) {
 							try {
-								ftpPanel.ftpClient.sendServer("RMD "
-										+ file.getName() + "\r\n");
-								ftpPanel.ftpClient.readServerResponse();
+								DelFileAction.this.ftpPanel.ftpClient.deleteFile(path + "/" + filename);
 							} catch (IOException e) {
 								e.printStackTrace();
 							}

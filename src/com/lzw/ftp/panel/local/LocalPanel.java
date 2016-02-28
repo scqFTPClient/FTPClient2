@@ -169,6 +169,7 @@ public class LocalPanel extends javax.swing.JPanel {
 		add(localSelFilePathLabel, gridBagConstraints);
 		
 		//初始化打开时候，默认显示当前文件夹
+		//TODO:目录显示不正常
 		this.listLocalFiles(new File("."));
 	}
 

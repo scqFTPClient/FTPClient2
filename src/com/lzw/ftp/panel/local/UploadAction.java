@@ -6,8 +6,9 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.net.ftp.FTPFile;
+
 import com.lzw.ftp.extClass.DiskFile;
-import com.lzw.ftp.extClass.FtpFile;
 
 class UploadAction extends AbstractAction {
 	private LocalPanel localPanel;
@@ -27,7 +28,7 @@ class UploadAction extends AbstractAction {
 
 		String pwd = this.localPanel.frame.getFtpPanel().getPwd();
 
-		FtpFile ftpFile = new FtpFile("", pwd, true);
+		FTPFile ftpFile = new FTPFile();
 
 		for (int i = 0; i < selRows.length; i++) {
 			Object valueAt = this.localPanel.localDiskTable.getValueAt(

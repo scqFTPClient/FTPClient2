@@ -7,6 +7,9 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
+/*
+ * 本地新建文件夹功能
+ */
 class CreateFolderAction extends AbstractAction {
 	private LocalPanel localPanel;
 

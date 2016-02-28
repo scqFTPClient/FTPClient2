@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-
+/*
+ * 刷新按钮
+ */
 class RefreshAction extends AbstractAction {
 	private FtpPanel ftpPanel;
 

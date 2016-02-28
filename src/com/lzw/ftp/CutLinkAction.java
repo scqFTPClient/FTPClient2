@@ -6,7 +6,9 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-
+/*
+ * 点击端口按钮,断开连接
+ */
 class CutLinkAction extends AbstractAction {
 	private FTP_Client_Frame frame;
 
@@ -26,8 +28,8 @@ class CutLinkAction extends AbstractAction {
 			frame.getLocalPanel().getQueue().clear();
 			if (frame.ftpClient != null && frame.ftpClient.serverIsOpen()) {
 				frame.ftpClient.sendServer("quit\r\n"); 
-				frame.ftpClient.readServerResponse();
 				frame.ftpClient = null;
+				System.out.println("退出成功！");
 			}
 
 			frame.localPanel.getActionMap().get("uploadAction").setEnabled(

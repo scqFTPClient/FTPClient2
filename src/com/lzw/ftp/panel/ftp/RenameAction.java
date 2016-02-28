@@ -7,8 +7,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-import com.lzw.ftp.extClass.FtpFile;
-
+import org.apache.commons.net.ftp.FTPFile;
+/*
+ * 重命名按钮,修改远程文件名
+ */
 class RenameAction extends AbstractAction {
 	private FtpPanel ftpPanel;
 
@@ -22,19 +24,21 @@ class RenameAction extends AbstractAction {
 		int selRow = ftpPanel.ftpDiskTable.getSelectedRow();
 		if (selRow < 0)
 			return;
-		FtpFile file = (FtpFile) ftpPanel.ftpDiskTable.getValueAt(selRow, 0);
+		//获取选中文件名
+		Object fileName =  ftpPanel.ftpDiskTable.getValueAt(selRow, 0);
 		String newName = JOptionPane.showInputDialog(ftpPanel, "请输入新文件名：");
-		if (file.getName().equals(".") || file.getName().equals("..")
+		if (fileName.equals(".") || fileName.equals("..")
 				|| newName == null)
 			return;
 		try {
-			ftpPanel.ftpClient.sendServer("RNFR " + file.getName() + "\r\n");
+			ftpPanel.ftpClient.sendServer("RNFR " + fileName + "\r\n");
 			ftpPanel.ftpClient.readServerResponse();
 			ftpPanel.ftpClient.sendServer("RNTO " + newName + "\r\n");
 			ftpPanel.ftpClient.readServerResponse();
 			ftpPanel.refreshCurrentFolder();
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		}
+		}		
+		
 	}
 }
