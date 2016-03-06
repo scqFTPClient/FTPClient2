@@ -81,9 +81,6 @@ public class MyFTPClient{
 		return ftpClient.makeDirectory(pathname);
 	}
 	
-	public synchronized void noop() throws IOException {
-
-	}
 	
 	//删除远程文件
 	public boolean deleteFile(String pathName) throws IOException {  
@@ -139,25 +136,30 @@ public class MyFTPClient{
             throws IOException {  
     	
         boolean flag = false;  
-        try {
-        	ftpClient.setControlEncoding("UTF-8");
-            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-
-            System.out.println("remote" + remoteFolder);
-            System.out.println("local" + localFolder);
-            ftpClient.changeWorkingDirectory(remoteFolder);
-            File file = new File(localFolder + "/" + remoteFileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            boolean a = ftpClient.retrieveFile(remoteFolder + "/" + remoteFileName, fos);
-            System.out.println("a" + a);
-            fos.close();
-            flag = true;
-        }catch (SocketException e) {
-        	e.printStackTrace();
-        }catch (IOException e) {
-        	e.printStackTrace();
-        }
         
+//		FTPClient ftpClient = new FTPClient();
+//		String hostName = ftpClient.getName();
+//		String userName = "hello";
+//		String password = "a";
+		try {
+//			ftpClient.connect(hostName, 21);
+			ftpClient.setControlEncoding("UTF-8");
+//			ftpClient.login(userName, password);
+			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+			FTPFile[] files = ftpClient.listFiles(remoteFolder);
+			for (int i = 0; i < files.length; i++) {
+				System.out.println(files[i].getName());
+			}
+			File file = new File(localFolder+ "/" + remoteFileName);
+			FileOutputStream fos = new FileOutputStream(file);
+			ftpClient.retrieveFile(remoteFolder + "/" + remoteFileName, fos);
+			fos.close();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
         return flag;  
     }  
       
@@ -199,7 +201,18 @@ public class MyFTPClient{
 		return ftpClient.isConnected();
 	}
 
-
+	public void setPort(int port) {
+		this.port = port;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+	
 	public int getPort() {
 		return port;
 	}

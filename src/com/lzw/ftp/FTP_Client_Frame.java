@@ -429,6 +429,9 @@ public class FTP_Client_Frame extends javax.swing.JFrame {
 			passStr = passStr == null ? "" : passStr.trim();
 			cutLinkButton.doClick();
 			ftpClient = new MyFTPClient();
+			ftpClient.setName(userStr);
+			ftpClient.setPass(passStr);
+			ftpClient.setPort(port);
 			ftpClient.openServer(server.trim(), port); 
 			ftpClient.login(userStr, passStr);
 			if (ftpClient.serverIsOpen()) { 

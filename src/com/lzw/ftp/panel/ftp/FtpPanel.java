@@ -225,14 +225,7 @@ public class FtpPanel extends javax.swing.JPanel {
 		final Timer timer = new Timer(3000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
 					final MyFTPClient ftpClient = FtpPanel.this.ftpClient;
-					if (ftpClient != null && ftpClient.serverIsOpen()) {
-						ftpClient.noop();
-					}
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
 			}
 		});
 		timer.start();

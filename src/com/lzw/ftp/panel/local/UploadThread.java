@@ -39,8 +39,6 @@ class UploadThread extends Thread {
 				while (conRun) {
 					try {
 						Thread.sleep(30000);
-
-						UploadThread.this.ftpClient.noop();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

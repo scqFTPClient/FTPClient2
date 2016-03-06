@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 import com.lzw.ftp.extClass.MyFTPClient;
@@ -37,7 +39,6 @@ public class DownThread extends Thread {
 				while (conRun) {
 					try {
 						Thread.sleep(30000);
-						ftpClient.noop();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -111,25 +112,26 @@ public class DownThread extends Thread {
 //		}
 	}
 
+	
+	
 	public void run() {
 		while (conRun) {
 			try {
 				Thread.sleep(1000);
-				ftpClient.noop();
 
 				queueValues = ftpPanel.queue.peek();
 				if (queueValues == null) {
 					continue;
 				}
-//				FTPFile file = (FTPFile) queueValues[0];
 				String fileName = (String) queueValues[0];
 				String localFolder = (String) queueValues[1];
 				if (fileName != null) {
-//					path = file.getPath();
-//					ftpClient.cd(path);
-//					downFile(file, localFolder);
 					System.out.println("本地文件夹: " + localFolder);
 					String remoteFolder = ftpPanel.getPwd();
+					System.out.println("remoteFolder:" + remoteFolder); // data/ftp
+					System.out.println("fileNmae:" + fileName);
+					System.out.println("localFolder" + localFolder);
+//					ftpClient.download(fileName, remoteFolder, localFolder);
 					ftpClient.download(fileName, remoteFolder, localFolder);
 					path = null;
 					ftpPanel.frame.getLocalPanel().refreshCurrentFolder();
