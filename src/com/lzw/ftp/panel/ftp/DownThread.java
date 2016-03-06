@@ -54,37 +54,17 @@ public class DownThread extends Thread {
 	/*
 	 * 下载选中文件到本地文件夹中
 	 */
-	private void downFile(FTPFile file, File localFolder) {
-
+//	private void downFile(FTPFile file, File localFolder) {
+//
 //		Object[] args = ftpPanel.queue.peek();
 //		if (queueValues == null || args == null || !queueValues[0].equals(args[0]))
 //			return;
 //		try {
 //			String ftpFileStr = file.getAbsolutePath().replaceFirst(path + "/", "");
 //			if (file.isFile()) {
-//				TelnetInputStream ftpIs = ftpClient.get(file.getName());
-//				if (ftpIs == null) {
-//					JOptionPane.showMessageDialog(this.ftpPanel, file.getName() + "�޷�����");
-//					return;
-//				}
-//				File downFile = new File(localFolder, ftpFileStr);
-//				FileOutputStream fout = new FileOutputStream(downFile, true);
-//				double fileLength = file.getLongSize() / Math.pow(1024, 2);
-//				ProgressArg progressArg = new ProgressArg((int) (file.getLongSize() / 1024), 0, 0);
-//				String size = String.format("%.4f MB", fileLength);
-//				Object[] row = new Object[] { ftpFileStr, size, downFile.getAbsolutePath(), ftpClient.getServer(),
-//						progressArg };
 //
-//				byte[] data = new byte[1024];
-//				int read = -1;
-//				while ((read = ftpIs.read(data)) > 0) {
-//					Thread.sleep(0, 30);
-//					fout.write(data, 0, read);
-//					progressArg.setValue(progressArg.getValue() + 1);
-//				}
-//				progressArg.setValue(progressArg.getMax());
-//				fout.close();
-//				ftpIs.close();
+////					JOptionPane.showMessageDialog(this.ftpPanel, file.getName() + "下载失败");
+////				ftpClient.download(remoteFileName, remoteFolder, localFolder)
 //			} else if (file.isDirectory()) {
 //				File directory = new File(localFolder, ftpFileStr);
 //				directory.mkdirs();
@@ -110,7 +90,7 @@ public class DownThread extends Thread {
 //		} catch (Exception ex) {
 //			ex.printStackTrace();
 //		}
-	}
+//	}
 
 	
 	
@@ -126,13 +106,22 @@ public class DownThread extends Thread {
 				String fileName = (String) queueValues[0];
 				String localFolder = (String) queueValues[1];
 				if (fileName != null) {
-					System.out.println("本地文件夹: " + localFolder);
+//					System.out.println("本地文件夹: " + localFolder);
 					String remoteFolder = ftpPanel.getPwd();
-					System.out.println("remoteFolder:" + remoteFolder); // data/ftp
-					System.out.println("fileNmae:" + fileName);
-					System.out.println("localFolder" + localFolder);
-//					ftpClient.download(fileName, remoteFolder, localFolder);
-					ftpClient.download(fileName, remoteFolder, localFolder);
+//					System.out.println("remoteFolder:" + remoteFolder); // data/ftp
+//					System.out.println("fileNmae:" + fileName);
+//					System.out.println("localFolder" + localFolder);
+					final int[] selRows = ftpPanel.ftpDiskTable.getSelectedRows();
+					final String fileType =  (String) ftpPanel.ftpDiskTable.getValueAt(selRows[0], 1);
+					if(fileType.equals("<DIR>")){
+						remoteFolder = remoteFolder + "/" + fileName;
+						ftpClient.downLoadDirectory(localFolder, remoteFolder);
+					}else {
+						ftpClient.download(fileName, remoteFolder, localFolder);
+					}
+					
+					
+
 					path = null;
 					ftpPanel.frame.getLocalPanel().refreshCurrentFolder();
 				}

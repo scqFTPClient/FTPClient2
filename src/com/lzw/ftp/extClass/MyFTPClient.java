@@ -137,14 +137,8 @@ public class MyFTPClient{
     	
         boolean flag = false;  
         
-//		FTPClient ftpClient = new FTPClient();
-//		String hostName = ftpClient.getName();
-//		String userName = "hello";
-//		String password = "a";
 		try {
-//			ftpClient.connect(hostName, 21);
 			ftpClient.setControlEncoding("UTF-8");
-//			ftpClient.login(userName, password);
 			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
 			FTPFile[] files = ftpClient.listFiles(remoteFolder);
 			for (int i = 0; i < files.length; i++) {
@@ -163,15 +157,31 @@ public class MyFTPClient{
         return flag;  
     }  
       
-    /**
-     * 从ftp服务器上下载文件到本地
-     * @param sourceFileName：服务器资源文件名称
-     * @return InputStream 输入流
-     * @throws IOException
-     */
-    public InputStream downFile(String sourceFileName) throws IOException {  
-        return ftpClient.retrieveFileStream(sourceFileName);  
-    }  
+    public boolean downLoadDirectory(String localDirectoryPath,String remoteDirectory) {  
+        try {  
+            String fileName = new File(remoteDirectory).getName();  // /data/ftp/a
+            localDirectoryPath = localDirectoryPath + "/" + fileName; // */a 
+            new File(localDirectoryPath).mkdirs();  
+            FTPFile[] allFile = this.ftpClient.listFiles(remoteDirectory);  
+            for (int currentFile = 0; currentFile < allFile.length; currentFile++) {  
+                if (!allFile[currentFile].isDirectory()) {  
+                    download(allFile[currentFile].getName(), remoteDirectory, localDirectoryPath);  
+                }  
+            }  
+            for (int currentFile = 0; currentFile < allFile.length; currentFile++) {  
+                if (allFile[currentFile].isDirectory()) {  
+                    String strremoteDirectoryPath = remoteDirectory + "/"+ allFile[currentFile].getName();  
+                    downLoadDirectory(localDirectoryPath,strremoteDirectoryPath);  
+                }  
+            }  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+            System.out.println("下载文件失败");
+            return false;  
+        }  
+        return true;  
+    } 
+    
     
 
 	//获取当前的目录
