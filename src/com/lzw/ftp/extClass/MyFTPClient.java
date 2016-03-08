@@ -20,7 +20,7 @@ public class MyFTPClient{
 	private int port;
 	private String name;
 	private String pass;
-	private FTPClient ftpClient;
+	private final FTPClient ftpClient;
 
 	public MyFTPClient() {
 		ftpClient = new FTPClient();
@@ -94,25 +94,24 @@ public class MyFTPClient{
      * localFilePath:本地文件路径和名称
      * remoteFileName:服务器文件名称
      */
-    public boolean uploadFile(String localFilePath, String remoteFileName)  
+    public boolean uploadFile(String localFileName, String remoteFolder)  
             throws IOException {  
-        boolean flag = false;  
-        InputStream iStream = null;  
-        try {  
-            iStream = new FileInputStream(localFilePath);  
-            //我们可以使用BufferedInputStream进行封装
-            //BufferedInputStream bis=new BufferedInputStream(iStream);
-            //flag = ftpClient.storeFile(remoteFileName, bis); 
-            flag = ftpClient.storeFile(remoteFileName, iStream);  
-        } catch (IOException e) {  
-            flag = false;  
-            return flag;  
-        } finally {  
-            if (iStream != null) {  
-                iStream.close();  
-            }  
-        }  
-        return flag;  
+    	 boolean flag = false;  
+         
+    	String remoteFileName  = localFileName;
+ 		try {
+ 			ftpClient.setControlEncoding("UTF-8");
+ 			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+ 			FileInputStream fis = new FileInputStream(localFileName);
+ 			ftpClient.storeFile(remoteFolder + "/" + remoteFileName, fis);
+ 			fis.close();
+ 		} catch (SocketException e) {
+ 			e.printStackTrace();
+ 		} catch (IOException e) {
+ 			e.printStackTrace();
+ 		}
+ 		
+         return flag;  
     } 
     /**
      * 上传文件到ftp服务器，上传新的文件名称和原名称一样
@@ -120,9 +119,9 @@ public class MyFTPClient{
      * @return
      * @throws IOException
      */
-    public boolean uploadFile(String fileName) throws IOException {  
-        return uploadFile(fileName, fileName);  
-    }  
+//    public boolean uploadFile(String fileName) throws IOException {  
+//        return uploadFile(fileName, fileName);  
+//    }  
     
     /**
      * 从ftp服务器上下载文件到本地
@@ -188,7 +187,7 @@ public class MyFTPClient{
 	public synchronized String pwd(){
 		String pwd = "";
 		try {
-			pwd = ftpClient.printWorkingDirectory();
+			pwd = this.ftpClient.printWorkingDirectory();
 			pwd = new String(pwd.getBytes("iso-8859-1"), "GBK");
 		} catch (IOException e) {
 			e.printStackTrace();

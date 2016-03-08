@@ -19,17 +19,20 @@ class UploadThread extends Thread {
 	String path = "";
 	String selPath;
 	private boolean conRun = true;
-	private MyFTPClient ftpClient;
+	private final MyFTPClient ftpClient;
 	private Object[] queueValues;
+	private FtpPanel ftpPanel;
 
-	public UploadThread(LocalPanel localPanel, String server, int port,
+	public UploadThread(LocalPanel localPanel, FtpPanel ftpPanel,String server, int port,
 			String userStr, String passStr) {
+		ftpClient = new MyFTPClient();
+		
 		try {
-			ftpClient = new MyFTPClient(server, port);
 			ftpClient.openServer(server, port);
 			ftpClient.login(userStr, passStr);
 			System.out.println("登录成功，准备上传！");
 			path = ftpClient.pwd();
+			this.ftpPanel = ftpPanel;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -149,7 +152,13 @@ class UploadThread extends Thread {
 				
 				FTPFile ftpFile = (FTPFile) queueValues[1]; 
 				if (file != null) {
-					selPath = file.getParent();
+					selPath = file.getParent(); //当前本地目录
+					String localFileName = file.getName();
+
+					//获取远程路径
+					String remoteFolder = this.ftpPanel.getPwd();
+					System.out.println("remote" + remoteFolder + " local" + localFileName);
+					ftpClient.uploadFile(localFileName, remoteFolder);
 //					copyFile(file, ftpFile);
 					FtpPanel ftpPanel = localPanel.frame.getFtpPanel();
 					ftpPanel.refreshCurrentFolder();

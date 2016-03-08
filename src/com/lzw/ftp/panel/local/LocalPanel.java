@@ -25,6 +25,7 @@ import javax.swing.table.TableStringConverter;
 import com.lzw.ftp.FTP_Client_Frame;
 import com.lzw.ftp.extClass.DiskFile;
 import com.lzw.ftp.panel.FTPTableCellRanderer;
+import com.lzw.ftp.panel.ftp.FtpPanel;
 import com.lzw.ftp.panel.ftp.TableConverter;
 
 public class LocalPanel extends javax.swing.JPanel {
@@ -322,7 +323,8 @@ public class LocalPanel extends javax.swing.JPanel {
 			String passStr) {
 		if (uploadThread != null)
 			uploadThread.stopThread();
-		uploadThread = new UploadThread(this, server, port, userStr, passStr);
+		FtpPanel ftpPanel = frame.getFtpPanel();
+		uploadThread = new UploadThread(this, ftpPanel ,server, port, userStr, passStr);
 		uploadThread.start();
 	}
 
