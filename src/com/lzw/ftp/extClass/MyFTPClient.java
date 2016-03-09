@@ -98,11 +98,15 @@ public class MyFTPClient{
             throws IOException {  
     	 boolean flag = false;  
          
-    	String remoteFileName  = localFileName;
+    	String remoteFileName  = new File(localFileName).getName();
+    	System.out.println("wo sji" +  remoteFileName);
  		try {
  			ftpClient.setControlEncoding("UTF-8");
  			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
  			FileInputStream fis = new FileInputStream(localFileName);
+ 			
+ 			System.out.println("fis is " + fis);
+ 			
  			ftpClient.storeFile(remoteFolder + "/" + remoteFileName, fis);
  			fis.close();
  		} catch (SocketException e) {
@@ -119,9 +123,49 @@ public class MyFTPClient{
      * @return
      * @throws IOException
      */
-//    public boolean uploadFile(String fileName) throws IOException {  
-//        return uploadFile(fileName, fileName);  
-//    }  
+    public boolean uploadDirectory(String localFolder, String remoteFolder){
+		String fileName = new File(localFolder).getName();
+		remoteFolder = remoteFolder + "/" + fileName;
+		try {
+			ftpClient.mkd(remoteFolder);
+			File[] allFiles = new File(localFolder).listFiles();
+			
+			
+			for(File currentFile: allFiles) {
+				System.out.println("uploadDire   " + currentFile.getName());
+				if(!currentFile.isDirectory()) {
+					System.out.println("remoteFolder is " + remoteFolder);
+					System.out.println("localFolder is " + localFolder);
+					this.uploadFile(localFolder + "/" + currentFile.getName(), remoteFolder);
+				}else {
+					String strLocalFolder = localFolder + "/" + currentFile.getName();
+					this.uploadDirectory(strLocalFolder, remoteFolder);
+				}
+			}
+			
+			
+//            String fileName = new File(remoteDirectory).getName();  // /data/ftp/a
+//            localDirectoryPath = localDirectoryPath + "/" + fileName; // */a 
+//            new File(localDirectoryPath).mkdirs();  
+//            FTPFile[] allFile = this.ftpClient.listFiles(remoteDirectory);  
+//            for (int currentFile = 0; currentFile < allFile.length; currentFile++) {  
+//                if (!allFile[currentFile].isDirectory()) {  
+//                    download(allFile[currentFile].getName(), remoteDirectory, localDirectoryPath);  
+//                }  
+//            }  
+//            for (int currentFile = 0; currentFile < allFile.length; currentFile++) {  
+//                if (allFile[currentFile].isDirectory()) {  
+//                    String strremoteDirectoryPath = remoteDirectory + "/"+ allFile[currentFile].getName();  
+//                    downLoadDirectory(localDirectoryPath,strremoteDirectoryPath);  
+//                }  
+//            }  
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return true;  
+	}
     
     /**
      * 从ftp服务器上下载文件到本地

@@ -158,7 +158,20 @@ class UploadThread extends Thread {
 					//获取远程路径
 					String remoteFolder = this.ftpPanel.getPwd();
 					System.out.println("remote" + remoteFolder + " local" + localFileName);
-					ftpClient.uploadFile(localFileName, remoteFolder);
+					
+					final int[] selRows = localPanel.localDiskTable.getSelectedRows();
+					final String fileType =  (String) localPanel.localDiskTable.getValueAt(selRows[0], 1);
+
+					
+					String localFolder = selPath;
+					if(fileType.equals("<DIR>")){
+						localFolder = localFolder + "/" + file.getName();
+						ftpClient.uploadDirectory(localFolder, remoteFolder);
+					}else {
+						ftpClient.uploadFile(localFileName, remoteFolder);
+					}
+					
+//					ftpClient.uploadFile(localFileName, remoteFolder);
 //					copyFile(file, ftpFile);
 					FtpPanel ftpPanel = localPanel.frame.getFtpPanel();
 					ftpPanel.refreshCurrentFolder();
